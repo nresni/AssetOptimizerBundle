@@ -33,6 +33,12 @@ abstract class BaseHelper extends Helper
     protected $assetHelper;
 
     /**
+     * @var Optimizer
+     */
+    protected $optimizer;
+    
+    
+    /**
      * Constructor.
      *
      * @param AssetsHelper $assetHelper A AssetsHelper instance

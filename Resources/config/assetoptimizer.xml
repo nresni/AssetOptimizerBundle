@@ -1,0 +1,32 @@
+<?xml version="1.0" ?>
+
+<container xmlns="http://www.symfony-project.org/schema/dic/services"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.symfony-project.org/schema/dic/services http://www.symfony-project.org/schema/dic/services/services-1.0.xsd">
+
+    <parameters>
+        <parameter key="templating.helper.javascripts.class">Bundle\AssetOptimizerBundle\Helper\JavascriptsHelper</parameter>
+        <parameter key="templating.helper.stylesheets.class">Bundle\AssetOptimizerBundle\Helper\StylesheetsHelper</parameter>
+    </parameters>
+
+    <services>
+    	<service id="templating.helper.stylesheets" class="%templating.helper.stylesheets.class%">
+            <tag name="templating.helper" alias="stylesheets" />
+            <argument type="service" id="templating.helper.assets" />
+        </service>
+    	<service id="templating.helper.javascripts" class="%templating.helper.javascripts.class%">
+            <tag name="templating.helper" alias="javascripts" />
+            <argument type="service" id="templating.helper.assets" />
+        </service>
+        <service id="asset.optimizer.javascript" class="Bundle\AssetOptimizerBundle\Asset\Optimizer\PackerOptimizer">
+            <argument type="service" id="request" />
+            <argument>/tmp</argument>
+        </service>
+        <service id="asset.optimizer.stylesheet" class="Bundle\AssetOptimizerBundle\Asset\Optimizer\MinifyOptimizer">
+            <argument type="service" id="request" />
+            <argument>%kernel.root_dir%/../../web/static</argument>
+            <argument>%kernel.root_dir%/../../web/static/cache</argument>
+        </service>
+
+    </services>
+</container>

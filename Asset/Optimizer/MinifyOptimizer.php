@@ -6,10 +6,12 @@ namespace Bundle\AssetOptimizerBundle\Asset\Optimizer;
  * Enter description here ...
  * @author dstendardi
  */
+use Bundle\AssetOptimizerBundle\Asset\BaseStylesheetOptimizer;
+
 use Bundle\AssetOptimizerBundle\Asset\Optimizer;
 use Bundle\AssetOptimizerBundle\Asset\Optimizer\Minify\CSS;
 
-class MinifyOptimizer extends Optimizer
+class MinifyOptimizer extends BaseStylesheetOptimizer
 {
   /**
    * (non-PHPdoc)
@@ -21,6 +23,6 @@ class MinifyOptimizer extends Optimizer
 
     $directory = dirname($filePath);
 
-    return CSS::minify($source, array('currentDir' => $directory));
+    return CSS::minify($source, array('currentDir' => $directory, 'docRoot'=> '/home/dstendardi/Workspace/fotegrav/web/static'));
   }
 }

@@ -15,11 +15,6 @@ use Symfony\Bundle\FrameworkBundle\Templating\Helper\AssetsHelper;
 abstract class Optimizer
 {
   /**
-   * @var AssetsHelper instnace
-   */
-  protected $assetHelper;
-
-  /**
    * @var Request instance
    */
   protected $request;
@@ -27,23 +22,45 @@ abstract class Optimizer
   /**
    *@var string path for assets
    */
-  protected $path;
+  protected $assetPath;
 
+  /**
+   * 
+   * Enter description here ...
+   * @var unknown_type
+   */
+  protected $cachePath;
 
   /**
    * Constructor.
    *
    * @param acHelperAsset $assetHelper A acHelperAsset instance
    */
-  public function __construct(Request $request, AssetsHelper $assetHelper, $path)
+  public function __construct(Request $request, $assetPath, $cachePath)
   {
     $this->setRequest($request);
 
-    $this->setAssetHelper($assetHelper);
-
-    $this->setPath($path);
+    $this->setAssetPath($assetPath);
+    
+    $this->setCachePath($cachePath);
   }
 
+  /**
+   * @var string full path to asset directory
+   */
+  public function setAssetPath($path)
+  {
+      $this->assetPath = realpath($path);    
+  }
+  
+  /**
+   * @var string full path to cache directory
+   */
+  public function setCachePath($path)
+  {
+      $this->cachePath = realpath($path);    
+  }
+    
   /**
    * Gets and compresses code from the given file path
    *
@@ -61,13 +78,13 @@ abstract class Optimizer
 
     $name = $this->getFileName();
 
-    $filePath = $this->path.'/'.$name;
+    $filePath = $this->cachePath.'/'.$name;
 
     if ( ! file_exists($filePath)) {
 
       foreach ($tagCollection->get() as $resource => $attributes)
-      {
-        $optimized .= $this->compress($this->path.$resource);
+      {          
+        $optimized .= $this->compress($this->assetPath.$resource);
       }
 
       if ( ! file_put_contents($filePath, $optimized))
@@ -78,23 +95,9 @@ abstract class Optimizer
 
     $tagCollection->flush();
 
-    $tagCollection->add($name);
-  }
-
-  /**
-   * @return acAssetHelper assetHelper
-   */
-  public function getAssetHelper()
-  {
-    return $this->assetHelper;
-  }
-
-  /**
-   * @param acAssetHelper assetHelper
-   */
-  public function setAssetHelper(AssetsHelper $assetHelper)
-  {
-    $this->assetHelper = $assetHelper;
+    $directory = str_replace($this->assetPath, '', $this->cachePath);
+    
+    $tagCollection->add($directory.'/'.$name);
   }
 
   /**
@@ -118,13 +121,6 @@ abstract class Optimizer
     $this->fileName = $fileName;
   }
 
-  /**
-   *
-   */
-  public function setPath($path)
-  {
-    $this->path = $path;
-  }
 
   /**
    * example : cache/foo-1-gecko.css
