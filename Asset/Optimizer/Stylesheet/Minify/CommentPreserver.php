@@ -1,8 +1,6 @@
 <?php
-namespace Bundle\AssetOptimizerBundle\Asset\Optimizer\Minify;
+namespace Bundle\AssetOptimizerBundle\Asset\Optimizer\Stylesheet\Minify;
 
-
-use Bundle\AssetOptimizerBundle\Asset\Optimizer\Minify\CSS\Compressor as Compressor;
 
 /**
  * Class Minify_CommentPreserver

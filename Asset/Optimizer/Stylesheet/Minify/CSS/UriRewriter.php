@@ -1,5 +1,5 @@
 <?php
-namespace Bundle\AssetOptimizerBundle\Asset\Optimizer\Minify\CSS;
+namespace Bundle\AssetOptimizerBundle\Asset\Optimizer\Stylesheet\Minify\CSS;
 
 /**
  * Class Minify_CSS_UriRewriter
@@ -19,7 +19,7 @@ class UriRewriter {
      * if you extend Minify_CSS_UriRewriter
      * @var string
      */
-    protected static $className = 'Bundle\AssetOptimizerBundle\Asset\Optimizer\Minify\CSS\UriRewriter';
+    protected static $className = 'Bundle\AssetOptimizerBundle\Asset\Optimizer\Stylesheet\Minify\CSS\UriRewriter';
 
     /**
      * Rewrite file relative URIs as root relative in CSS files

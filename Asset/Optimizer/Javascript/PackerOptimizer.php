@@ -1,9 +1,11 @@
 <?php
-namespace Bundle\AssetOptimizerBundle\Asset\Optimizer;
+namespace Bundle\AssetOptimizerBundle\Asset\Optimizer\Javascript;
+
+use Bundle\AssetOptimizerBundle\Asset\Optimizer\JavascriptOptimizer;
 
 use Bundle\AssetOptimizerBundle\Asset\Optimizer;
 
-use Bundle\AssetOptimizerBundle\Asset\Optimizer\Packer\Packer;
+use Bundle\AssetOptimizerBundle\Asset\Optimizer\Javascript\Packer\Packer;
 
 /**
  *
@@ -11,7 +13,7 @@ use Bundle\AssetOptimizerBundle\Asset\Optimizer\Packer\Packer;
  * @author dstendardi
  *
  */
-class PackerOptimizer extends Optimizer
+class PackerOptimizer extends JavascriptOptimizer
 {
   /**
    * (non-PHPdoc)

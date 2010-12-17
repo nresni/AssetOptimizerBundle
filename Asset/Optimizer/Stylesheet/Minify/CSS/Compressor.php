@@ -1,5 +1,5 @@
 <?php
-namespace Bundle\AssetOptimizerBundle\Asset\Optimizer\Minify\CSS;
+namespace Bundle\AssetOptimizerBundle\Asset\Optimizer\Stylesheet\Minify\CSS;
 
 /**
  * Class Minify_CSS_Compressor

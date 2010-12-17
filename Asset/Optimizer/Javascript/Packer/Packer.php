@@ -1,5 +1,5 @@
 <?php
-namespace Bundle\AssetOptimizerBundle\Asset\Optimizer\Packer;
+namespace Bundle\AssetOptimizerBundle\Asset\Optimizer\Javascript\Packer;
 
 /**
  * 9 April 2008. version 1.1
@@ -68,7 +68,7 @@ namespace Bundle\AssetOptimizerBundle\Asset\Optimizer\Packer;
  *   UTF-8 in your files...
  */
 
-use Bundle\AssetOptimizerBundle\Asset\Optimizer\Packer\ParseMaster;
+use Bundle\AssetOptimizerBundle\Asset\Optimizer\Javascript\Packer\ParseMaster;
 
 
 class Packer {

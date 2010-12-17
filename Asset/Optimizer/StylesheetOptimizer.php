@@ -1,5 +1,5 @@
 <?php
-namespace Bundle\AssetOptimizerBundle\Asset;
+namespace Bundle\AssetOptimizerBundle\Asset\Optimizer;
 
 use Bundle\AssetOptimizerBundle\Asset\Optimizer;
 
@@ -9,7 +9,7 @@ use Bundle\AssetOptimizerBundle\Asset\Optimizer;
  * @author dstendardi
  *
  */
-abstract class BaseStylesheetOptimizer extends Optimizer
+abstract class StylesheetOptimizer extends Optimizer
 {
     protected $fileName = 'compressed-<signature>.css';
 }
