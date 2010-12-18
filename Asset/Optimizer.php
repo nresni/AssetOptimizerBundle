@@ -57,12 +57,28 @@ abstract class Optimizer
         $this->assetPath = realpath($path);
     }
 
+    /**
+     * @return string asset path
+     */
+    public function getAssetPath()
+    {
+        return $this->assetPath;
+    }
+
    /**
     * @var string full path to cache directory
     */
     public function setCachePath($path)
     {
         $this->cachePath = realpath($path);
+    }
+
+    /**
+     * @return string cache path
+     */
+    public function getCachePath()
+    {
+        return $this->cachePath;
     }
 
     /**
@@ -77,7 +93,7 @@ abstract class Optimizer
 
         $name = $this->getFileName($resources);
 
-        $filePath = $this->cachePath.'/'.$name;
+        $filePath = $this->getCachePath().'/'.$name;
 
         if ( ! file_exists($filePath)) {
 
@@ -85,14 +101,14 @@ abstract class Optimizer
                 $optimized .= $this->compress($this->assetPath.$resource);
           }
 
-          if ( ! file_put_contents($filePath, $optimized)) {
-                throw new RuntimeException("Unable to write the file <$filePath>");
+          if (false === file_put_contents($filePath, $optimized)) {
+                throw new \RuntimeException("Unable to write the file <$filePath>");
           }
         }
 
         $resources->flush();
 
-        $directory = str_replace($this->assetPath, '', $this->cachePath);
+        $directory = str_replace($this->getAssetPath(), '', $this->getCachePath());
 
         $resources->add($directory.'/'.$name);
     }
