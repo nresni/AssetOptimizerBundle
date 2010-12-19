@@ -1,6 +1,10 @@
 <?php
 namespace Bundle\AssetOptimizerBundle\Asset;
 
+use Symfony\Component\EventDispatcher\Event;
+
+use Symfony\Bundle\FrameworkBundle\EventDispatcher;
+
 use Symfony\Component\HttpFoundation\Request;
 
 use Bundle\AssetOptimizerBundle\Helper\BaseHelper;
@@ -34,12 +38,19 @@ abstract class Optimizer
     protected $fileMask;
 
    /**
+    * @var EventDispatcher dispatcher
+    */
+    protected $eventDispatcher;
+
+   /**
     * Constructor.
     *
     * @param acHelperAsset $assetHelper A acHelperAsset instance
     */
-    public function __construct(Request $request, $assetPath, $cachePath)
+    public function __construct(EventDispatcher $eventDispatcher, Request $request, $assetPath, $cachePath)
     {
+        $this->setEventDispatcher($eventDispatcher);
+
         $this->setRequest($request);
 
         $this->setAssetPath($assetPath);
@@ -53,6 +64,22 @@ abstract class Optimizer
     * @param string $filePath
     */
     protected abstract function compress($filePath);
+
+   /**
+    * @param EventDispatcher dispatcher
+    */
+    public function setEventDispatcher(EventDispatcher $eventDispatcher)
+    {
+        $this->eventDispatcher = $eventDispatcher;
+    }
+
+    /**
+     * @return EventDispatcher
+     */
+    public function getEventDispatcher()
+    {
+        return $this->eventDispatcher;
+    }
 
    /**
     * @var string full path to asset directory
@@ -92,17 +119,21 @@ abstract class Optimizer
     *
     * @param BaseHelper resource collection
     */
-    public function optimize(BaseHelper $resources)
+    public function optimize(BaseHelper $helper)
     {
         $optimized = '';
 
-        $name = $this->getFileName($resources);
+        $name = $this->getFileName($helper);
 
         $filePath = $this->getCachePath().'/'.$name;
 
         if ( ! file_exists($filePath)) {
 
-          foreach ($resources->get() as $resource => $attributes) {
+          $resources = $helper->get();
+
+          $resources = $this->filterResources($resources);
+
+          foreach ($resources as $resource => $attributes) {
                 $optimized .= $this->compress($this->assetPath.$resource);
           }
 
@@ -111,11 +142,26 @@ abstract class Optimizer
           }
         }
 
-        $resources->flush();
+        $helper->flush();
 
         $directory = str_replace($this->getAssetPath(), '', $this->getCachePath());
 
-        $resources->add($directory.'/'.$name);
+        $helper->add($directory.'/'.$name);
+    }
+
+   /**
+    * Filter the resources using event dispatcher
+    *
+    * @param array resources
+    * @return array filtered resources
+    */
+    public function filterResources(array $resources)
+    {
+        $event = new Event($this, 'assetoptimizer.filter_resources');
+
+        $this->getEventDispatcher()->filter($event, $resources);
+
+        return $event->getReturnValue();
     }
 
    /**

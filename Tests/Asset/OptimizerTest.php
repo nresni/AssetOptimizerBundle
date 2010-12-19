@@ -32,11 +32,15 @@ class OptimizerTest extends \PHPUnit_Framework_TestCase
      */
     public function testOptimize()
     {
-        $this->optimizer = $this->getMockBuilder('Bundle\AssetOptimizerBundle\Asset\Optimizer')->disableOriginalConstructor()->setMethods(array('compress', 'getFileName', 'getCachePath', 'getAssetPath'))->getMock();
+        $this->optimizer = $this->getMockBuilder('Bundle\AssetOptimizerBundle\Asset\Optimizer')->disableOriginalConstructor()->setMethods(array('compress', 'getFileName', 'getCachePath', 'getAssetPath', 'filterResources'))->getMock();
 
-        $this->helper->expects($this->any())->method('get')->will($this->returnValue(array('vfs://tmp/foo.css' => array(), 'vfs://tmp/bar.css' => array())));
+        $resources = array('vfs://tmp/foo.css' => array(), 'vfs://tmp/bar.css' => array());
+
+        $this->helper->expects($this->any())->method('get')->will($this->returnValue($resources));
 
         $this->helper->expects($this->once())->method('add')->with($this->equalTo("/cache/foo-bar.css"));
+
+        $this->optimizer->expects($this->any())->method('filterResources')->will($this->returnArgument(0));
 
         $this->optimizer->expects($this->any())->method('compress')->will($this->onConsecutiveCalls('a', 'b'));
 

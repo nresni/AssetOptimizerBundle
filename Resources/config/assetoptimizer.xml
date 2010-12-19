@@ -19,11 +19,13 @@
             <argument type="service" id="templating.helper.assets" />
         </service>
         <service id="asset.optimizer.javascript" class="Bundle\AssetOptimizerBundle\Asset\Optimizer\Javascript\PackerOptimizer">
+            <argument type="service" id="event_dispatcher" />
             <argument type="service" id="request" />
             <argument>%kernel.root_dir%/../../web/static</argument>
             <argument>%kernel.root_dir%/../../web/static/cache</argument>
         </service>
         <service id="asset.optimizer.stylesheet" class="Bundle\AssetOptimizerBundle\Asset\Optimizer\Stylesheet\MinifyOptimizer">
+            <argument type="service" id="event_dispatcher" />
             <argument type="service" id="request" />
             <argument>%kernel.root_dir%/../../web/static</argument>
             <argument>%kernel.root_dir%/../../web/static/cache</argument>
