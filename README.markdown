@@ -53,20 +53,14 @@ Here is an exemple of code that checks for attributes "sprite-suffix" and replac
      */
     public function filterResources($event, $resources)
     {
-        foreach($resources as $url => $attributes)
-        {
-            if (isset($resource['sprite-suffix']))
-            {
+        foreach ($resources as $url => $attributes) {
+            if (isset($resource['sprite-suffix'])) {
                 $spriteUrl = str_replace('.css', 'sprite.css', $url);
-
                 unset($attributes['sprite-suffix']);
-
                 $resources[$spriteUrl] = $attributes;
-
                 unset($resources[$url]);
             }
         }
-
         return $resources;
     }
 
