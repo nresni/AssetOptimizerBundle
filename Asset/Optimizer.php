@@ -28,6 +28,11 @@ abstract class Optimizer
     */
     protected $cachePath;
 
+    /**
+     * @var string the file name
+     */
+    protected $fileMask;
+
    /**
     * Constructor.
     *
@@ -114,35 +119,64 @@ abstract class Optimizer
     }
 
    /**
-    * @param string user agent
+    * @param Request instance
     */
     public function setRequest(Request $request)
     {
         $this->request = $request;
     }
 
-   /**
-    * @param string $fileName
-    */
-    public function setFileName($fileName)
+    /**
+     * @return Request  instance
+     */
+    public function getRequest()
     {
-        $this->fileName = $fileName;
+        return $this->request;
     }
 
    /**
-    * example : cache/foo-1-gecko.css
+    * @param string file mask with replacements
+    */
+    public function setFileMask($fileMask)
+    {
+        $this->fileMask = $fileMask;
+    }
+
+    /**
+     * @return string a mask with replacements
+     */
+    protected function getFileMask()
+    {
+        return $this->fileMask;
+    }
+
+    /**
+     * @return string user agent
+     */
+    public function getRequestUserAgent()
+    {
+        return $this->request->headers->get('User-Agent');
+    }
+
+   /**
+    * Returns the expected file name for the bundled file.
+    * The signature is deduced from the user agent & the file names
     *
     * @return string file name
     */
-    protected function getFileName(BaseHelper $resources)
+    protected function getFileName(BaseHelper $helper)
     {
-        $signature = array_keys($resources->get());
+        $resources = $helper->get();
 
-        $signature[] = $this->request->headers->get('User-Agent');
+        $signature = array_keys($resources);
+
+        sort($signature);
+
+        $signature[] = $this->getRequestUserAgent();
 
         $signature = implode('-', $signature);
 
-        $name = strtr($this->fileName, array('<signature>' => md5($signature)));
+        $name = strtr($this->getFileMask(), array('<signature>' => md5($signature)));
 
         return $name;
     }
