@@ -37,6 +37,38 @@ should generate a file and produces:
 
     <link href="http://assets.mysite.com/cache/compressed-f71dbe52628a3f83a77ab494817525c6.css" rel="stylesheet" type="text/css" />
 
+## Extend the asset optimizer
+
+If you wish to add some unsupported behavior to the asset optimizer, feel free to use the following events
+
+
+###  assetoptimizer.filter_resources
+
+This event is triggered just before the resources are optimized.
+Here is an exemple of code that checks for attributes "sprite-suffix" and replace the resource url with the sprited css
+
+    /**
+     * @param Event
+     * @param array resources
+     */
+    public function filterResources($event, $resources)
+    {
+        foreach($resources as $url => $attributes)
+        {
+            if (isset($resource['sprite-suffix']))
+            {
+                $spriteUrl = str_replace('.css', 'sprite.css', $url);
+
+                unset($attributes['sprite-suffix']);
+
+                $resources[$spriteUrl] = $attributes;
+
+                unset($resources[$url]);
+            }
+        }
+
+        return $resources;
+    }
 
 ## Vendor
 
