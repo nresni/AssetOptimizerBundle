@@ -22,9 +22,11 @@ Provides "on the fly" assets compression.
 ### Setup file compression in your config.yml
 
     assetoptimizer.config:
-        assets_path: %kernel.root_dir%/../web/assets
         javascripts: ~
         stylesheets: ~
+        # optionals (with default values)
+        # assets_path: %kernel.root_dir%/../web/assets
+        # cache_path: %kernel.root_dir%/../web/assets/cache
 
 ### Add a cache directory inside the assets folder
 
