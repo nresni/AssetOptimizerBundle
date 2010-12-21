@@ -26,6 +26,12 @@ Provides "on the fly" assets compression.
         javascripts: ~
         stylesheets: ~
 
+### Add a cache directory inside the assets folder
+
+Do not forget to give write permissions
+
+    mkdir -p path/to/assets/cache && chmod 775 path/to/assets/cache
+
 ### There is no changes inside templates
 
 the following code
