@@ -7,6 +7,8 @@
     <parameters>
         <parameter key="templating.helper.javascripts.class">Bundle\AssetOptimizerBundle\Helper\JavascriptsHelper</parameter>
         <parameter key="templating.helper.stylesheets.class">Bundle\AssetOptimizerBundle\Helper\StylesheetsHelper</parameter>
+        <parameter key="assetoptimizer.assets_path">%kernel.root_dir%/../web/static</parameter>
+        <parameter key="assetoptimizer.cache_path">%assetoptimizer.assets_path%/cache</parameter>
     </parameters>
 
     <services>
@@ -21,14 +23,14 @@
         <service id="asset.optimizer.javascript" class="Bundle\AssetOptimizerBundle\Asset\Optimizer\Javascript\PackerOptimizer">
             <argument type="service" id="event_dispatcher" />
             <argument type="service" id="request" />
-            <argument>%kernel.root_dir%/../../web/static</argument>
-            <argument>%kernel.root_dir%/../../web/static/cache</argument>
+            <argument>%assetoptimizer.assets_path%</argument>
+            <argument>%assetoptimizer.cache_path%</argument>
         </service>
         <service id="asset.optimizer.stylesheet" class="Bundle\AssetOptimizerBundle\Asset\Optimizer\Stylesheet\MinifyOptimizer">
             <argument type="service" id="event_dispatcher" />
             <argument type="service" id="request" />
-            <argument>%kernel.root_dir%/../../web/static</argument>
-            <argument>%kernel.root_dir%/../../web/static/cache</argument>
+            <argument>%assetoptimizer.assets_path%</argument>
+            <argument>%assetoptimizer.cache_path%</argument>
         </service>
 
     </services>

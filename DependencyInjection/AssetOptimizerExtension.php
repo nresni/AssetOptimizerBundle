@@ -26,20 +26,22 @@ class AssetOptimizerExtension extends Extension
             $loader = new XmlFileLoader($container, __DIR__.'/../Resources/config');
             $loader->load('assetoptimizer.xml');
         }
-        
-        if (isset($config['assets.path'])) 
-        {
-            $container->getDefinition('asset.optimizer.stylesheet')->addMethodCall('setAssetPath', array($config['assets.path']));
+
+        if (isset($config['assets_path'])) {
+            $container->setParameter('assetoptimizer.assets_path', $config['assets_path']);
         }
-        
-        if (array_key_exists('javascripts', $config))
-        {
-            $container->getDefinition('templating.helper.javascripts')->addMethodCall('setOptimizer', array(new Reference('asset.optimizer.javascript')));
+
+        if (isset($config['cache_path'])) {
+            $container->setParameter('assetoptimizer.cache_path', $config['cache_path']);
         }
-        
-        if (array_key_exists('stylesheets', $config))
-        {
-            $container->getDefinition('templating.helper.stylesheets')->addMethodCall('setOptimizer', array(new Reference('asset.optimizer.stylesheet')));
+
+        foreach(array('javascript', 'stylesheet') as $type) {
+
+          $plural = $type.'s';
+
+          if (array_key_exists($plural, $config)) {
+              $container->getDefinition('templating.helper.'.$plural)->addMethodCall('setOptimizer', array(new Reference('asset.optimizer.'.$type)));
+          }
         }
     }
 
@@ -50,14 +52,22 @@ class AssetOptimizerExtension extends Extension
      */
     public function getXsdValidationBasePath()
     {
-        return __DIR__.'/../Resources/config/schema';
+        return null;
     }
 
+    /**
+     *
+     * Enter description here ...
+     */
     public function getNamespace()
     {
-        return 'http://www.symfony-project.org/schema/dic/twig';
+        return null;
     }
 
+    /**
+     *
+     * Enter description here ...
+     */
     public function getAlias()
     {
         return 'assetoptimizer';
