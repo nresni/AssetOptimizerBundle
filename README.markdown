@@ -45,7 +45,17 @@ should generate a file and produces:
 
     <link href="http://assets.mysite.com/cache/compressed-f71dbe52628a3f83a77ab494817525c6.css" rel="stylesheet" type="text/css" />
 
-## Extend the asset optimizer
+
+
+## Command lines
+
+
+### Clear the generated cache files
+
+    console assets:optimizer:clear-cache
+
+
+## How to extend the asset optimizer
 
 If you wish to add some unsupported behavior to the asset optimizer, feel free to use the following events
 
@@ -74,6 +84,6 @@ Here is an exemple of code that checks for attributes "sprite-suffix" and replac
 
 ## Vendor
 
-In order ot ease the setup, this bundle contains two vendor libraries : [Minify](http://code.google.com/p/minify/wiki/ComponentClasses) & [JavascriptPacker](http://joliclic.free.fr/php/javascript-packer/en/)
+In order to ease the setup, this bundle contains two vendor libraries : [Minify](http://code.google.com/p/minify/wiki/ComponentClasses) & [JavascriptPacker](http://joliclic.free.fr/php/javascript-packer/en/)
 
 It clearly goes against one of the [best practices](http://docs.symfony-reloaded.org/guides/bundles/best_practices.html), but there is no easy way to setup required dependency yet.
