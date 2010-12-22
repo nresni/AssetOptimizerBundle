@@ -26,8 +26,18 @@ class OptimizerExposer extends Optimizer
      *
      * @param BaseHelper helper
      */
-    public function exposeGetFileName(BaseHelper $helper)
+    public function exposeGetFileName(array $resources)
     {
-        return $this->getFileName($helper);
+        return $this->getFileName($resources);
+    }
+
+    /**
+     * Exposes the protected get file name method
+     *
+     * @param BaseHelper helper
+     */
+    public function exposeProcess(array $resources)
+    {
+        return $this->process($resources);
     }
 }

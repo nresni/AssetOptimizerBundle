@@ -36,8 +36,8 @@ abstract class BaseHelper extends Helper
      * @var Optimizer
      */
     protected $optimizer;
-    
-    
+
+
     /**
      * Constructor.
      *
@@ -141,8 +141,17 @@ abstract class BaseHelper extends Helper
     }
 
     /**
+     * Removes a resource by uri
      *
-     * Enter description here ...
+     * @param string uri
+     */
+    public function remove($uri)
+    {
+      unset($this->resources[$uri]);
+    }
+
+    /**
+     * Removes all resources
      */
     public function flush()
     {

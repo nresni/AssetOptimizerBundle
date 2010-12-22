@@ -121,32 +121,69 @@ abstract class Optimizer
     */
     public function optimize(BaseHelper $helper)
     {
-        $optimized = '';
+        $resources = $this->collect($helper);
 
-        $name = $this->getFileName($helper);
+        $name = $this->getFileName($resources);
 
         $filePath = $this->getCachePath().'/'.$name;
 
         if ( ! file_exists($filePath)) {
-
-          $resources = $helper->get();
-
-          $resources = $this->filterResources($resources);
-
-          foreach ($resources as $resource => $attributes) {
-                $optimized .= $this->compress($this->assetPath.$resource);
-          }
-
-          if (false === file_put_contents($filePath, $optimized)) {
-                throw new \RuntimeException("Unable to write the file <$filePath>");
-          }
+            $code = $this->process($resources);
+            if (false === file_put_contents($filePath, $code)) {
+                  throw new \RuntimeException("Unable to write the file <$filePath>");
+            }
         }
 
-        $helper->flush();
+        foreach ($resources as $resource => $attributes) {
+            $helper->remove($resource);
+        }
 
         $directory = str_replace($this->getAssetPath(), '', $this->getCachePath());
 
         $helper->add($directory.'/'.$name);
+    }
+
+    /**
+     * Create the cache file
+     *
+     * @param array resources
+     * @param string file path
+     */
+    protected function process(array $resources)
+    {
+        $buffer = '';
+
+        $resources = $this->filterResources($resources);
+
+        foreach ($resources as $resource => $attributes) {
+
+          $path = $this->getAssetPath().$resource;
+
+          if (  ! file_exists($path)) {
+              throw new \InvalidArgumentException('The following file does not exists : '.$path);
+          }
+
+          $buffer .= $this->compress($path);
+        }
+
+        return $buffer;
+    }
+
+    /**
+     * Collect the optimizible resources
+     *
+     * @param BaseHelper helper
+     * @return array resources
+     */
+    public function collect(BaseHelper $helper)
+    {
+        $locals = array();
+        foreach($helper->get() as $uri => $attributes) {
+          if(0 !== strpos($uri,'http' )) {
+            $locals[$uri] = $attributes;
+          }
+        }
+        return $locals;
     }
 
    /**
@@ -210,10 +247,8 @@ abstract class Optimizer
     *
     * @return string file name
     */
-    protected function getFileName(BaseHelper $helper)
+    protected function getFileName(array $resources)
     {
-        $resources = $helper->get();
-
         $signature = array_keys($resources);
 
         sort($signature);

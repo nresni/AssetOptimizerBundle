@@ -23,7 +23,7 @@ class OptimizerTest extends \PHPUnit_Framework_TestCase
 
          mkdir('vfs://tmp/cache', 0777, true);
 
-         $this->helper = $this->getMockBuilder('Bundle\AssetOptimizerBundle\Helper\BaseHelper')->disableOriginalConstructor()->disableOriginalClone()->setMethods(array('renderTag', 'getName', 'get', 'add'))->getMock();
+         $this->helper = $this->getMockBuilder('Bundle\AssetOptimizerBundle\Helper\BaseHelper')->disableOriginalConstructor()->disableOriginalClone()->setMethods(array('renderTag', 'getName', 'getLocalResources', 'add', 'remove', 'get'))->getMock();
     }
 
     /**
@@ -32,17 +32,19 @@ class OptimizerTest extends \PHPUnit_Framework_TestCase
      */
     public function testOptimize()
     {
-        $this->optimizer = $this->getMockBuilder('Bundle\AssetOptimizerBundle\Asset\Optimizer')->disableOriginalConstructor()->setMethods(array('compress', 'getFileName', 'getCachePath', 'getAssetPath', 'filterResources'))->getMock();
+        $this->optimizer = $this->getMockBuilder('Bundle\AssetOptimizerBundle\Asset\Optimizer')->disableOriginalConstructor()->setMethods(array('process', 'compress', 'collect', 'getFileName', 'getCachePath', 'getAssetPath', 'filterResources'))->getMock();
 
-        $resources = array('vfs://tmp/foo.css' => array(), 'vfs://tmp/bar.css' => array());
+        $resources = array('/foo.css' => array(), '/bar.css' => array());
 
-        $this->helper->expects($this->any())->method('get')->will($this->returnValue($resources));
+        $this->optimizer->expects($this->any())->method('collect')->with($this->helper)->will($this->returnValue($resources));
+
+        $this->optimizer->expects($this->once())->method('process')->with($resources);
 
         $this->helper->expects($this->once())->method('add')->with($this->equalTo("/cache/foo-bar.css"));
 
-        $this->optimizer->expects($this->any())->method('filterResources')->will($this->returnArgument(0));
+        $this->helper->expects($this->at(0))->method('remove')->with($this->equalTo('/foo.css'));
 
-        $this->optimizer->expects($this->any())->method('compress')->will($this->onConsecutiveCalls('a', 'b'));
+        $this->helper->expects($this->at(1))->method('remove')->with($this->equalTo('/bar.css'));
 
         $this->optimizer->expects($this->any())->method('getAssetPath')->will($this->returnValue('vfs://tmp'));
 
@@ -51,6 +53,62 @@ class OptimizerTest extends \PHPUnit_Framework_TestCase
         $this->optimizer->expects($this->any())->method('getFileName')->will($this->returnValue('foo-bar.css'));
 
         $this->optimizer->optimize($this->helper);
+    }
+
+    /**
+     * @test
+     * @cover Bundle\AssetOptimizerBundle\Asset\Optimizer::doOptimize
+     */
+     public function testProcess()
+     {
+          file_put_contents('vfs://tmp/foo.css', 'a');
+
+          file_put_contents('vfs://tmp/bar.css', 'b');
+
+          $this->optimizer = $this->getMockBuilder('Bundle\AssetOptimizerBundle\Tests\Asset\OptimizerExposer')->setMethods(array('filterResources', 'getAssetPath', 'compress'))->disableOriginalConstructor()->getMock();
+
+          $this->optimizer->expects($this->any())->method('getAssetPath')->will($this->returnValue('vfs://tmp'));
+
+          $this->optimizer->expects($this->any())->method('filterResources')->will($this->returnArgument(0));
+
+          $this->optimizer->expects($this->any())->method('compress')->will($this->onConsecutiveCalls('a', 'b'));
+
+          $this->assertEquals('ab', $this->optimizer->exposeProcess(array('/foo.css' => array(), '/bar.css' => array())));
+     }
+
+    /**
+     * @test
+     * @cover Bundle\AssetOptimizerBundle\Asset\Optimizer::doOptimize
+     * @expectedException InvalidArgumentException
+     */
+     public function testDoOptimizeThrowAnExceptionWhenAFileIsNotFound()
+     {
+          file_put_contents('vfs://tmp/foo.css', 'a');
+
+          $this->optimizer = $this->getMockBuilder('Bundle\AssetOptimizerBundle\Tests\Asset\OptimizerExposer')->setMethods(array('filterResources', 'getAssetPath', 'compress'))->disableOriginalConstructor()->getMock();
+
+          $this->optimizer->expects($this->any())->method('getAssetPath')->will($this->returnValue('vfs://tmp'));
+
+          $this->optimizer->expects($this->any())->method('filterResources')->will($this->returnArgument(0));
+
+          $this->optimizer->expects($this->any())->method('compress')->will($this->onConsecutiveCalls('a', 'b'));
+
+          $this->assertEquals('ab', $this->optimizer->exposeProcess(array('/foo.css' => array(), '/bar.css' => array())));
+     }
+
+    /**
+     * @test
+     * @cover Bundle\AssetOptimizerBundle\Asset\Optimizer::collect
+     */
+    public function testCollect()
+    {
+        $this->optimizer = $this->getMockBuilder('Bundle\AssetOptimizerBundle\Asset\Optimizer')->disableOriginalConstructor()->setMethods(array('compress'))->getMock();
+
+        $resources = array('vfs://tmp/foo.css' => array(), 'http://tmp/bar.css' => array());
+
+        $this->helper->expects($this->once())->method('get')->will($this->returnValue($resources));
+
+        $this->assertEquals(array('vfs://tmp/foo.css' => array()), $this->optimizer->collect($this->helper));
     }
 
     /**
@@ -65,9 +123,7 @@ class OptimizerTest extends \PHPUnit_Framework_TestCase
 
         $this->optimizer->expects($this->any())->method('getFileMask')->will($this->returnValue('mask-<signature>.css'));
 
-        $this->helper->expects($this->any())->method('get')->will($this->returnValue(array('vfs://tmp/foo.css' => array(), 'vfs://tmp/bar.css' => array())));
-
-        $this->assertEquals('mask-cdda47aa3f963c11d4850a9e7b21353b.css', $this->optimizer->exposeGetFileName($this->helper), 'the file name contains the expected md5 hash');
+        $this->assertEquals('mask-cdda47aa3f963c11d4850a9e7b21353b.css', $this->optimizer->exposeGetFileName(array('vfs://tmp/foo.css' => array(), 'vfs://tmp/bar.css' => array())), 'the file name contains the expected md5 hash');
     }
 
     /**
@@ -80,11 +136,9 @@ class OptimizerTest extends \PHPUnit_Framework_TestCase
 
         $this->optimizer->expects($this->any())->method('getFileMask')->will($this->returnValue('mask-<signature>.css'));
 
-        $this->helper->expects($this->any())->method('get')->will($this->returnValue(array('vfs://tmp/bar.css' => array(), 'vfs://tmp/foo.css' => array())));
-
         $this->optimizer->expects($this->any())->method('getRequestUserAgent')->will($this->returnValue('foo'));
 
-        $this->assertEquals('mask-cdda47aa3f963c11d4850a9e7b21353b.css', $this->optimizer->exposeGetFileName($this->helper), 'the md5 hash does not depends on resources order');
+        $this->assertEquals('mask-cdda47aa3f963c11d4850a9e7b21353b.css', $this->optimizer->exposeGetFileName(array('vfs://tmp/bar.css' => array(), 'vfs://tmp/foo.css' => array())), 'the md5 hash does not depends on resources order');
     }
 
     /**
@@ -97,10 +151,8 @@ class OptimizerTest extends \PHPUnit_Framework_TestCase
 
         $this->optimizer->expects($this->any())->method('getFileMask')->will($this->returnValue('mask-<signature>.css'));
 
-        $this->helper->expects($this->any())->method('get')->will($this->returnValue(array('vfs://tmp/bar.css' => array(), 'vfs://tmp/foo.css' => array())));
-
         $this->optimizer->expects($this->any())->method('getRequestUserAgent')->will($this->returnValue('bar'));
 
-        $this->assertEquals('mask-a499e21d88613b36c559c633a7376017.css', $this->optimizer->exposeGetFileName($this->helper), 'the md5 hash does depends on user agent');
+        $this->assertEquals('mask-a499e21d88613b36c559c633a7376017.css', $this->optimizer->exposeGetFileName(array('vfs://tmp/bar.css' => array(), 'vfs://tmp/foo.css' => array())), 'the md5 hash does depends on user agent');
     }
 }
