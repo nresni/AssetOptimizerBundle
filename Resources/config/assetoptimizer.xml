@@ -7,7 +7,7 @@
     <parameters>
         <parameter key="templating.helper.javascripts.class">Bundle\AssetOptimizerBundle\Helper\JavascriptsHelper</parameter>
         <parameter key="templating.helper.stylesheets.class">Bundle\AssetOptimizerBundle\Helper\StylesheetsHelper</parameter>
-        <parameter key="assetoptimizer.assets_path">%kernel.root_dir%/../web/static</parameter>
+        <parameter key="assetoptimizer.assets_path">%kernel.root_dir%/../web/assets</parameter>
         <parameter key="assetoptimizer.cache_path">%assetoptimizer.assets_path%/cache</parameter>
     </parameters>
 
