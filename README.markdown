@@ -39,13 +39,14 @@ Do not forget to give write permissions
 the following code
 
     <?php $view['stylesheets']->add('/foo/bar.css'); ?>
+    <?php $view['stylesheets']->add('/bar/foo.css'); ?>
+    <?php $view['stylesheets']->add('http://foo.com/bar.css'); ?>
     <?php echo $view['stylesheets'] ?>
     
-should generate a file and produces:
+should generate a file and produces (note that externals assets are ignored):
 
     <link href="http://assets.mysite.com/cache/compressed-f71dbe52628a3f83a77ab494817525c6.css" rel="stylesheet" type="text/css" />
-
-
+    <link href="http://foo.com/bar.css" rel="stylesheet" type="text/css" />
 
 ## Command lines
 
