@@ -7,7 +7,7 @@
     <parameters>
         <parameter key="templating.helper.javascripts.class">Bundle\Adenclassifieds\AssetOptimizerBundle\Helper\JavascriptsHelper</parameter>
         <parameter key="templating.helper.stylesheets.class">Bundle\Adenclassifieds\AssetOptimizerBundle\Helper\StylesheetsHelper</parameter>
-        <parameter key="assetoptimizer.assets_path">%kernel.root_dir%/../web/assets</parameter>
+        <parameter key="assetoptimizer.assets_path">%kernel.root_dir%/../web</parameter>
         <parameter key="assetoptimizer.cache_path">%assetoptimizer.assets_path%/cache</parameter>
     </parameters>
 

@@ -18,6 +18,6 @@ class MinifyOptimizer extends StylesheetOptimizer
 
     $directory = dirname($filePath);
 
-    return CSS::minify($source, array('currentDir' => $directory, 'docRoot'=> $this->assetPath));
+    return CSS::minify($source, array('currentDir' => $directory, 'docRoot'=> $this->getAssetPath()));
   }
 }

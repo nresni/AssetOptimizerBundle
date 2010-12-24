@@ -109,7 +109,7 @@ abstract class Optimizer
 
         foreach ($resources as $resource => $attributes) {
 
-          $path = $this->getAssetPath().$resource;
+          $path = $this->getAssetPath().'/'.$resource;
 
           if (  ! file_exists($path)) {
               throw new \InvalidArgumentException('The following file does not exists : '.$path);
