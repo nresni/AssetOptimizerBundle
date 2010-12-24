@@ -111,7 +111,7 @@ abstract class Optimizer
 
           $path = $this->getAssetPath().$resource;
 
-          if (  ! file_exists($path)) {die($this->getAssetPath());
+          if (  ! file_exists($path)) {
               throw new \InvalidArgumentException('The following file does not exists : '.$path);
           }
 
