@@ -25,14 +25,17 @@ Provides "on the fly" assets compression.
         javascripts: ~
         stylesheets: ~
         # optionals (with default values)
-        # assets_path: %kernel.root_dir%/../web/assets
-        # cache_path: %kernel.root_dir%/../web/assets/cache
+        # assets_path: %kernel.root_dir%/../web
+        # cache_path: %kernel.root_dir%/../web/cache
 
 ### Add a cache directory inside the assets folder
 
 Do not forget to give write permissions
 
-    mkdir -p path/to/assets/cache && chmod 775 path/to/assets/cache
+    mkdir -p path/to/cache && chmod 775 path/to/assets/cache
+
+**If this is not done a error with `cannot write to /compressed-823782837283723823gdasdhjad.css` which is because realpath is trying
+to resolve a non existing path and therefor resolves it to root**
 
 ### There is no changes inside templates
 
@@ -59,7 +62,6 @@ should generate a file and produces (note that externals assets are ignored):
 ## How to extend the asset optimizer
 
 If you wish to add some unsupported behavior to the asset optimizer, feel free to use the following events
-
 
 ###  assetoptimizer.filter_resources
 
