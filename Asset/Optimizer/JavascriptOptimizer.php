@@ -1,7 +1,7 @@
 <?php
-namespace Bundle\AssetOptimizerBundle\Asset\Optimizer;
+namespace Bundle\Adenclassifieds\AssetOptimizerBundle\Asset\Optimizer;
 
-use Bundle\AssetOptimizerBundle\Asset\Optimizer;
+use Bundle\Adenclassifieds\AssetOptimizerBundle\Asset\Optimizer;
 
 /**
  *

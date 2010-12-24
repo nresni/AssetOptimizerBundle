@@ -1,5 +1,5 @@
 <?php
-namespace Bundle\AssetOptimizerBundle;
+namespace Bundle\Adenclassifieds\AssetOptimizerBundle;
 
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 

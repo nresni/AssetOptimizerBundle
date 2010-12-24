@@ -1,5 +1,5 @@
 <?php
-namespace Bundle\AssetOptimizerBundle\DependencyInjection;
+namespace Bundle\Adenclassifieds\AssetOptimizerBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\Reference;
 

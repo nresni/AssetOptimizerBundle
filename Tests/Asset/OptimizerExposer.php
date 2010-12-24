@@ -1,9 +1,9 @@
 <?php
-namespace Bundle\AssetOptimizerBundle\Tests\Asset;
+namespace Bundle\Adenclassifieds\AssetOptimizerBundle\Tests\Asset;
 
-use Bundle\AssetOptimizerBundle\Helper\BaseHelper;
+use Bundle\Adenclassifieds\AssetOptimizerBundle\Helper\BaseHelper;
 
-use Bundle\AssetOptimizerBundle\Asset\Optimizer;
+use Bundle\Adenclassifieds\AssetOptimizerBundle\Asset\Optimizer;
 
 /**
  * Exposer for the get file name method
@@ -14,7 +14,7 @@ class OptimizerExposer extends Optimizer
 {
     /**
      * (non-PHPdoc)
-     * @see src/Bundle/AssetOptimizerBundle/Asset/Bundle\AssetOptimizerBundle\Asset.Optimizer::compress()
+     * @see src/Bundle/AssetOptimizerBundle/Asset/Bundle\Adenclassifieds\AssetOptimizerBundle\Asset.Optimizer::compress()
      */
     protected function compress($filepath)
     {

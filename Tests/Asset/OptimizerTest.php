@@ -1,10 +1,10 @@
 <?php
-namespace Bundle\AssetOptimizerBundle\Tests\Asset;
+namespace Bundle\Adenclassifieds\AssetOptimizerBundle\Tests\Asset;
 
 require_once 'vfsStream/vfsStream.php';
 
-use Bundle\AssetOptimizerBundle\Asset\Optimizer;
-use Bundle\AssetOptimizerBundle\Helper\BaseHelper;
+use Bundle\Adenclassifieds\AssetOptimizerBundle\Asset\Optimizer;
+use Bundle\Adenclassifieds\AssetOptimizerBundle\Helper\BaseHelper;
 use vfsStreamWrapper;
 
 /**
@@ -23,16 +23,16 @@ class OptimizerTest extends \PHPUnit_Framework_TestCase
 
          mkdir('vfs://tmp/cache', 0777, true);
 
-         $this->helper = $this->getMockBuilder('Bundle\AssetOptimizerBundle\Helper\BaseHelper')->disableOriginalConstructor()->disableOriginalClone()->setMethods(array('renderTag', 'getName', 'getLocalResources', 'add', 'remove', 'get'))->getMock();
+         $this->helper = $this->getMockBuilder('Bundle\Adenclassifieds\AssetOptimizerBundle\Helper\BaseHelper')->disableOriginalConstructor()->disableOriginalClone()->setMethods(array('renderTag', 'getName', 'getLocalResources', 'add', 'remove', 'get'))->getMock();
     }
 
     /**
      * @test
-     * @cover Bundle\AssetOptimizerBundle\Asset\Optimizer::optimize
+     * @cover Bundle\Adenclassifieds\AssetOptimizerBundle\Asset\Optimizer::optimize
      */
     public function testOptimize()
     {
-        $this->optimizer = $this->getMockBuilder('Bundle\AssetOptimizerBundle\Asset\Optimizer')->disableOriginalConstructor()->setMethods(array('process', 'compress', 'collect', 'getFileName', 'getCachePath', 'getAssetPath', 'filterResources'))->getMock();
+        $this->optimizer = $this->getMockBuilder('Bundle\Adenclassifieds\AssetOptimizerBundle\Asset\Optimizer')->disableOriginalConstructor()->setMethods(array('process', 'compress', 'collect', 'getFileName', 'getCachePath', 'getAssetPath', 'filterResources'))->getMock();
 
         $resources = array('/foo.css' => array(), '/bar.css' => array());
 
@@ -57,7 +57,7 @@ class OptimizerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @cover Bundle\AssetOptimizerBundle\Asset\Optimizer::doOptimize
+     * @cover Bundle\Adenclassifieds\AssetOptimizerBundle\Asset\Optimizer::doOptimize
      */
      public function testProcess()
      {
@@ -65,7 +65,7 @@ class OptimizerTest extends \PHPUnit_Framework_TestCase
 
           file_put_contents('vfs://tmp/bar.css', 'b');
 
-          $this->optimizer = $this->getMockBuilder('Bundle\AssetOptimizerBundle\Tests\Asset\OptimizerExposer')->setMethods(array('filterResources', 'getAssetPath', 'compress'))->disableOriginalConstructor()->getMock();
+          $this->optimizer = $this->getMockBuilder('Bundle\Adenclassifieds\AssetOptimizerBundle\Tests\Asset\OptimizerExposer')->setMethods(array('filterResources', 'getAssetPath', 'compress'))->disableOriginalConstructor()->getMock();
 
           $this->optimizer->expects($this->any())->method('getAssetPath')->will($this->returnValue('vfs://tmp'));
 
@@ -78,14 +78,14 @@ class OptimizerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @cover Bundle\AssetOptimizerBundle\Asset\Optimizer::doOptimize
+     * @cover Bundle\Adenclassifieds\AssetOptimizerBundle\Asset\Optimizer::doOptimize
      * @expectedException InvalidArgumentException
      */
      public function testDoOptimizeThrowAnExceptionWhenAFileIsNotFound()
      {
           file_put_contents('vfs://tmp/foo.css', 'a');
 
-          $this->optimizer = $this->getMockBuilder('Bundle\AssetOptimizerBundle\Tests\Asset\OptimizerExposer')->setMethods(array('filterResources', 'getAssetPath', 'compress'))->disableOriginalConstructor()->getMock();
+          $this->optimizer = $this->getMockBuilder('Bundle\Adenclassifieds\AssetOptimizerBundle\Tests\Asset\OptimizerExposer')->setMethods(array('filterResources', 'getAssetPath', 'compress'))->disableOriginalConstructor()->getMock();
 
           $this->optimizer->expects($this->any())->method('getAssetPath')->will($this->returnValue('vfs://tmp'));
 
@@ -98,11 +98,11 @@ class OptimizerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @cover Bundle\AssetOptimizerBundle\Asset\Optimizer::collect
+     * @cover Bundle\Adenclassifieds\AssetOptimizerBundle\Asset\Optimizer::collect
      */
     public function testCollect()
     {
-        $this->optimizer = $this->getMockBuilder('Bundle\AssetOptimizerBundle\Asset\Optimizer')->disableOriginalConstructor()->setMethods(array('compress'))->getMock();
+        $this->optimizer = $this->getMockBuilder('Bundle\Adenclassifieds\AssetOptimizerBundle\Asset\Optimizer')->disableOriginalConstructor()->setMethods(array('compress'))->getMock();
 
         $resources = array('vfs://tmp/foo.css' => array(), 'http://tmp/bar.css' => array());
 
@@ -117,7 +117,7 @@ class OptimizerTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetFileName()
     {
-        $this->optimizer = $this->getMockBuilder('Bundle\AssetOptimizerBundle\Tests\Asset\OptimizerExposer')->setMethods(array('getRequestUserAgent', 'getFileMask'))->disableOriginalConstructor()->getMock();
+        $this->optimizer = $this->getMockBuilder('Bundle\Adenclassifieds\AssetOptimizerBundle\Tests\Asset\OptimizerExposer')->setMethods(array('getRequestUserAgent', 'getFileMask'))->disableOriginalConstructor()->getMock();
 
         $this->optimizer->expects($this->any())->method('getRequestUserAgent')->will($this->returnValue('foo'));
 
@@ -128,11 +128,11 @@ class OptimizerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @cover Bundle\AssetOptimizerBundle\Asset\Optimizer::getFileName
+     * @cover Bundle\Adenclassifieds\AssetOptimizerBundle\Asset\Optimizer::getFileName
      */
     public function testGetFileNameDoesNotDependsOnResourcesOrder()
     {
-        $this->optimizer = $this->getMockBuilder('Bundle\AssetOptimizerBundle\Tests\Asset\OptimizerExposer')->setMethods(array('getRequestUserAgent', 'getFileMask'))->disableOriginalConstructor()->getMock();
+        $this->optimizer = $this->getMockBuilder('Bundle\Adenclassifieds\AssetOptimizerBundle\Tests\Asset\OptimizerExposer')->setMethods(array('getRequestUserAgent', 'getFileMask'))->disableOriginalConstructor()->getMock();
 
         $this->optimizer->expects($this->any())->method('getFileMask')->will($this->returnValue('mask-<signature>.css'));
 
@@ -143,11 +143,11 @@ class OptimizerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @cover Bundle\AssetOptimizerBundle\Asset\Optimizer::getFileName
+     * @cover Bundle\Adenclassifieds\AssetOptimizerBundle\Asset\Optimizer::getFileName
      */
     public function testGetFileNameDependsOnRequestUserAgent()
     {
-        $this->optimizer = $this->getMockBuilder('Bundle\AssetOptimizerBundle\Tests\Asset\OptimizerExposer')->setMethods(array('getRequestUserAgent', 'getFileMask'))->disableOriginalConstructor()->getMock();
+        $this->optimizer = $this->getMockBuilder('Bundle\Adenclassifieds\AssetOptimizerBundle\Tests\Asset\OptimizerExposer')->setMethods(array('getRequestUserAgent', 'getFileMask'))->disableOriginalConstructor()->getMock();
 
         $this->optimizer->expects($this->any())->method('getFileMask')->will($this->returnValue('mask-<signature>.css'));
 

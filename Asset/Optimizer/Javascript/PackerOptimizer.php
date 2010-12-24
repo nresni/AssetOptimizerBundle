@@ -1,11 +1,11 @@
 <?php
-namespace Bundle\AssetOptimizerBundle\Asset\Optimizer\Javascript;
+namespace Bundle\Adenclassifieds\AssetOptimizerBundle\Asset\Optimizer\Javascript;
 
-use Bundle\AssetOptimizerBundle\Asset\Optimizer\JavascriptOptimizer;
+use Bundle\Adenclassifieds\AssetOptimizerBundle\Asset\Optimizer\JavascriptOptimizer;
 
-use Bundle\AssetOptimizerBundle\Asset\Optimizer;
+use Bundle\Adenclassifieds\AssetOptimizerBundle\Asset\Optimizer;
 
-use Bundle\AssetOptimizerBundle\Asset\Optimizer\Javascript\Packer\Packer;
+use Bundle\Adenclassifieds\AssetOptimizerBundle\Asset\Optimizer\Javascript\Packer\Packer;
 
 /**
  *

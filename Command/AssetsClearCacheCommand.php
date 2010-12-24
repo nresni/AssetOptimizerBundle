@@ -1,6 +1,6 @@
 <?php
 
-namespace Bundle\AssetOptimizerBundle\Command;
+namespace Bundle\Adenclassifieds\AssetOptimizerBundle\Command;
 
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;

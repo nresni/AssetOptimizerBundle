@@ -1,7 +1,7 @@
 <?php
-namespace Bundle\AssetOptimizerBundle\Helper;
+namespace Bundle\Adenclassifieds\AssetOptimizerBundle\Helper;
 
-use Bundle\AssetOptimizerBundle\Helper\ResourceCollectionHelper;
+use Bundle\Adenclassifieds\AssetOptimizerBundle\Helper\ResourceCollectionHelper;
 /**
  *
  * Enter description here ...
@@ -11,7 +11,7 @@ class JavascriptsHelper extends BaseHelper
 {
     /**
      * (non-PHPdoc)
-     * @see Bundle\AssetOptimizerBundle\Helper.ResourceCollectionHelper::renderTag()
+     * @see Bundle\Adenclassifieds\AssetOptimizerBundle\Helper.ResourceCollectionHelper::renderTag()
      */
     protected function renderTag($path, $atts)
     {

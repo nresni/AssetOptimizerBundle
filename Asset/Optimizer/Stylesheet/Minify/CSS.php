@@ -1,9 +1,9 @@
 <?php
-namespace Bundle\AssetOptimizerBundle\Asset\Optimizer\Stylesheet\Minify;
+namespace Bundle\Adenclassifieds\AssetOptimizerBundle\Asset\Optimizer\Stylesheet\Minify;
 
-use Bundle\AssetOptimizerBundle\Asset\Optimizer\Stylesheet\Minify\CommentPreserver;
-use Bundle\AssetOptimizerBundle\Asset\Optimizer\Stylesheet\Minify\CSS\UriRewriter;
-use Bundle\AssetOptimizerBundle\Asset\Optimizer\Stylesheet\Minify\CSS\Compressor;
+use Bundle\Adenclassifieds\AssetOptimizerBundle\Asset\Optimizer\Stylesheet\Minify\CommentPreserver;
+use Bundle\Adenclassifieds\AssetOptimizerBundle\Asset\Optimizer\Stylesheet\Minify\CSS\UriRewriter;
+use Bundle\Adenclassifieds\AssetOptimizerBundle\Asset\Optimizer\Stylesheet\Minify\CSS\Compressor;
 
 /**
  * Class Minify_CSS
@@ -62,7 +62,7 @@ class CSS {
     } else {
       $css = CommentPreserver::process(
       $css
-      ,array('Bundle\AssetOptimizerBundle\Asset\Optimizer\Stylesheet\Minify\CSS\Compressor', 'process')
+      ,array('Bundle\Adenclassifieds\AssetOptimizerBundle\Asset\Optimizer\Stylesheet\Minify\CSS\Compressor', 'process')
       ,array($options)
       );
     }

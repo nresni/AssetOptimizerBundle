@@ -1,5 +1,5 @@
 <?php
-namespace Bundle\AssetOptimizerBundle\Helper;
+namespace Bundle\Adenclassifieds\AssetOptimizerBundle\Helper;
 /**
  * resourcesHelper is a helper that manages resources.
  *
@@ -12,7 +12,7 @@ namespace Bundle\AssetOptimizerBundle\Helper;
  *
  * @author Fabien Potencier <fabien.potencier@symfony-project.com>
  */
-use Bundle\AssetOptimizerBundle\Asset\Optimizer;
+use Bundle\Adenclassifieds\AssetOptimizerBundle\Asset\Optimizer;
 use Symfony\Component\Templating\Helper\Helper;
 use Symfony\Bundle\FrameworkBundle\Templating\Helper\AssetsHelper;
 

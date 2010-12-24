@@ -1,5 +1,5 @@
 <?php
-namespace Bundle\AssetOptimizerBundle\Asset;
+namespace Bundle\Adenclassifieds\AssetOptimizerBundle\Asset;
 
 use Symfony\Component\EventDispatcher\Event;
 
@@ -7,7 +7,7 @@ use Symfony\Bundle\FrameworkBundle\EventDispatcher;
 
 use Symfony\Component\HttpFoundation\Request;
 
-use Bundle\AssetOptimizerBundle\Helper\BaseHelper;
+use Bundle\Adenclassifieds\AssetOptimizerBundle\Helper\BaseHelper;
 
 use Symfony\Bundle\FrameworkBundle\Templating\Helper\AssetsHelper;
 
@@ -66,6 +66,123 @@ abstract class Optimizer
     protected abstract function compress($filePath);
 
    /**
+    * Collect and compress asset code inside a unique file
+    * using basePath & fileName configuration
+    *
+    * @param BaseHelper resource collection
+    */
+    public function optimize(BaseHelper $helper)
+    {
+        $resources = $this->collect($helper);
+
+        $name = $this->getFileName($resources);
+
+        $filePath = $this->getCachePath().'/'.$name;
+
+        if ( ! file_exists($filePath)) {
+            $code = $this->process($resources);
+            if (false === file_put_contents($filePath, $code)) {
+                  throw new \RuntimeException("Unable to write the file <$filePath>");
+            }
+        }
+
+        foreach ($resources as $resource => $attributes) {
+            $helper->remove($resource);
+        }
+
+        $directory = str_replace($this->getAssetPath(), '', $this->getCachePath());
+
+        $helper->add($directory.'/'.$name);
+    }
+
+    /**
+     * Create the cache file
+     *
+     * @param array resources
+     * @param string file path
+     */
+    protected function process(array $resources)
+    {
+        $buffer = '';
+
+        $resources = $this->filterResources($resources);
+
+        foreach ($resources as $resource => $attributes) {
+
+          $path = $this->getAssetPath().$resource;
+
+          if (  ! file_exists($path)) {die($this->getAssetPath());
+              throw new \InvalidArgumentException('The following file does not exists : '.$path);
+          }
+
+          $buffer .= $this->compress($path);
+        }
+
+        return $buffer;
+    }
+
+    /**
+     * Collect the optimizible resources
+     *
+     * @param BaseHelper helper
+     * @return array resources
+     */
+    public function collect(BaseHelper $helper)
+    {
+        $locals = array();
+        foreach($helper->get() as $uri => $attributes) {
+          if(0 !== strpos($uri,'http' )) {
+            $locals[$uri] = $attributes;
+          }
+        }
+        return $locals;
+    }
+
+   /**
+    * Filter the resources using event dispatcher
+    *
+    * @param array resources
+    * @return array filtered resources
+    */
+    public function filterResources(array $resources)
+    {
+        $event = new Event($this, 'assetoptimizer.filter_resources');
+
+        $this->getEventDispatcher()->filter($event, $resources);
+
+        return $event->getReturnValue();
+    }
+
+   /**
+    * Returns the expected file name for the bundled file.
+    * The signature is deduced from the user agent & the file names
+    *
+    * @return string file name
+    */
+    protected function getFileName(array $resources)
+    {
+        $signature = array_keys($resources);
+
+        sort($signature);
+
+        $signature[] = $this->getRequestUserAgent();
+
+        $signature = implode('-', $signature);
+
+        $name = strtr($this->getFileMask(), array('<signature>' => md5($signature)));
+
+        return $name;
+    }
+
+    /**
+     * @return string user agent
+     */
+    public function getRequestUserAgent()
+    {
+        return $this->request->headers->get('User-Agent');
+    }
+
+   /**
     * @param EventDispatcher dispatcher
     */
     public function setEventDispatcher(EventDispatcher $eventDispatcher)
@@ -113,94 +230,6 @@ abstract class Optimizer
         return $this->cachePath;
     }
 
-    /**
-    * Collect and compress asset code inside a unique file
-    * using basePath & fileName configuration
-    *
-    * @param BaseHelper resource collection
-    */
-    public function optimize(BaseHelper $helper)
-    {
-        $resources = $this->collect($helper);
-
-        $name = $this->getFileName($resources);
-
-        $filePath = $this->getCachePath().'/'.$name;
-
-        if ( ! file_exists($filePath)) {
-            $code = $this->process($resources);
-            if (false === file_put_contents($filePath, $code)) {
-                  throw new \RuntimeException("Unable to write the file <$filePath>");
-            }
-        }
-
-        foreach ($resources as $resource => $attributes) {
-            $helper->remove($resource);
-        }
-
-        $directory = str_replace($this->getAssetPath(), '', $this->getCachePath());
-
-        $helper->add($directory.'/'.$name);
-    }
-
-    /**
-     * Create the cache file
-     *
-     * @param array resources
-     * @param string file path
-     */
-    protected function process(array $resources)
-    {
-        $buffer = '';
-
-        $resources = $this->filterResources($resources);
-
-        foreach ($resources as $resource => $attributes) {
-
-          $path = $this->getAssetPath().$resource;
-
-          if (  ! file_exists($path)) {
-              throw new \InvalidArgumentException('The following file does not exists : '.$path);
-          }
-
-          $buffer .= $this->compress($path);
-        }
-
-        return $buffer;
-    }
-
-    /**
-     * Collect the optimizible resources
-     *
-     * @param BaseHelper helper
-     * @return array resources
-     */
-    public function collect(BaseHelper $helper)
-    {
-        $locals = array();
-        foreach($helper->get() as $uri => $attributes) {
-          if(0 !== strpos($uri,'http' )) {
-            $locals[$uri] = $attributes;
-          }
-        }
-        return $locals;
-    }
-
-   /**
-    * Filter the resources using event dispatcher
-    *
-    * @param array resources
-    * @return array filtered resources
-    */
-    public function filterResources(array $resources)
-    {
-        $event = new Event($this, 'assetoptimizer.filter_resources');
-
-        $this->getEventDispatcher()->filter($event, $resources);
-
-        return $event->getReturnValue();
-    }
-
    /**
     * @param Request instance
     */
@@ -231,34 +260,5 @@ abstract class Optimizer
     protected function getFileMask()
     {
         return $this->fileMask;
-    }
-
-    /**
-     * @return string user agent
-     */
-    public function getRequestUserAgent()
-    {
-        return $this->request->headers->get('User-Agent');
-    }
-
-   /**
-    * Returns the expected file name for the bundled file.
-    * The signature is deduced from the user agent & the file names
-    *
-    * @return string file name
-    */
-    protected function getFileName(array $resources)
-    {
-        $signature = array_keys($resources);
-
-        sort($signature);
-
-        $signature[] = $this->getRequestUserAgent();
-
-        $signature = implode('-', $signature);
-
-        $name = strtr($this->getFileMask(), array('<signature>' => md5($signature)));
-
-        return $name;
     }
 }

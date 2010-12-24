@@ -1,10 +1,10 @@
 <?php
-namespace Bundle\AssetOptimizerBundle\Asset\Optimizer\Stylesheet;
+namespace Bundle\Adenclassifieds\AssetOptimizerBundle\Asset\Optimizer\Stylesheet;
 
 
-use Bundle\AssetOptimizerBundle\Asset\Optimizer\StylesheetOptimizer;
+use Bundle\Adenclassifieds\AssetOptimizerBundle\Asset\Optimizer\StylesheetOptimizer;
 
-use Bundle\AssetOptimizerBundle\Asset\Optimizer\Stylesheet\Minify\CSS;
+use Bundle\Adenclassifieds\AssetOptimizerBundle\Asset\Optimizer\Stylesheet\Minify\CSS;
 
 class MinifyOptimizer extends StylesheetOptimizer
 {
