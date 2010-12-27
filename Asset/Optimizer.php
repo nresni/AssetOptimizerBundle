@@ -204,6 +204,10 @@ abstract class Optimizer
     public function setAssetPath($path)
     {
         $this->assetPath = realpath($path);
+
+        if (false === $this->assetPath) {
+            throw new \InvalidArgumentException("The given asset path does not exists : $path");
+        }
     }
 
     /**
@@ -220,6 +224,10 @@ abstract class Optimizer
     public function setCachePath($path)
     {
         $this->cachePath = realpath($path);
+
+        if (false === $this->cachePath) {
+            throw new \InvalidArgumentException("The given cache path does not exists : $path");
+        }
     }
 
     /**

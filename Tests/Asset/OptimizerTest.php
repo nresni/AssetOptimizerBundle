@@ -155,4 +155,28 @@ class OptimizerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('mask-a499e21d88613b36c559c633a7376017.css', $this->optimizer->exposeGetFileName(array('vfs://tmp/bar.css' => array(), 'vfs://tmp/foo.css' => array())), 'the md5 hash does depends on user agent');
     }
+
+    /**
+     * @test
+     * @cover Bundle\Adenclassifieds\AssetOptimizerBundle\Asset\Optimizer::setAssetPath
+     * @expectedException InvalidArgumentException
+     */
+    public function testSetCachePathThrowAnExceptionWhenPathDoesNotExists()
+    {
+        $this->optimizer = $this->getMockBuilder('Bundle\Adenclassifieds\AssetOptimizerBundle\Tests\Asset\OptimizerExposer')->setMethods(array('getRequestUserAgent', 'getFileMask'))->disableOriginalConstructor()->getMock();
+
+        $this->optimizer->setAssetPath('foo');
+    }
+
+    /**
+     * @test
+     * @cover Bundle\Adenclassifieds\AssetOptimizerBundle\Asset\Optimizer::setCachePath
+     * @expectedException InvalidArgumentException
+     */
+    public function testSetAssetPathThrowAnExceptionWhenPathDoesNotExists()
+    {
+        $this->optimizer = $this->getMockBuilder('Bundle\Adenclassifieds\AssetOptimizerBundle\Tests\Asset\OptimizerExposer')->setMethods(array('getRequestUserAgent', 'getFileMask'))->disableOriginalConstructor()->getMock();
+
+        $this->optimizer->setCachePath('foo');
+    }
 }
