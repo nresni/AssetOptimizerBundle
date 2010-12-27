@@ -1,7 +1,7 @@
 <?php
-namespace Bundle\Adenclassifieds\AssetOptimizerBundle\Helper;
+namespace Bundle\Adenclassifieds\AssetOptimizerBundle\Templating\Helper;
 
-use Bundle\Adenclassifieds\AssetOptimizerBundle\Helper\ResourceCollectionHelper;
+use Bundle\Adenclassifieds\AssetOptimizerBundle\Helper\Templating\ResourceCollectionHelper;
 /**
  *
  * Enter description here ...
@@ -15,7 +15,7 @@ class JavascriptsHelper extends BaseHelper
      */
     protected function renderTag($path, $atts)
     {
-      return sprintf('<script type="text/javascript" src="%s"%s></script>', $path, $atts);
+      return sprintf('<script type="text/javascript" src="%s?%s"%s></script>', $path, $this->assetHelper->getVersion(), $atts);
     }
 
     /**

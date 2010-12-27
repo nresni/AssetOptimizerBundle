@@ -7,7 +7,7 @@ use Symfony\Bundle\FrameworkBundle\EventDispatcher;
 
 use Symfony\Component\HttpFoundation\Request;
 
-use Bundle\Adenclassifieds\AssetOptimizerBundle\Helper\BaseHelper;
+use Bundle\Adenclassifieds\AssetOptimizerBundle\Templating\Helper\BaseHelper;
 
 use Symfony\Bundle\FrameworkBundle\Templating\Helper\AssetsHelper;
 
@@ -42,12 +42,17 @@ abstract class Optimizer
     */
     protected $eventDispatcher;
 
+    /**
+     * @var Boolean
+     */
+    protected $debug = false;
+
    /**
     * Constructor.
     *
     * @param acHelperAsset $assetHelper A acHelperAsset instance
     */
-    public function __construct(EventDispatcher $eventDispatcher, Request $request, $assetPath, $cachePath)
+    public function __construct(EventDispatcher $eventDispatcher, Request $request, $assetPath, $cachePath, $debug = false)
     {
         $this->setEventDispatcher($eventDispatcher);
 
@@ -56,6 +61,8 @@ abstract class Optimizer
         $this->setAssetPath($assetPath);
 
         $this->setCachePath($cachePath);
+
+        $this->debug = (Boolean) $debug;
     }
 
    /**
@@ -78,6 +85,10 @@ abstract class Optimizer
         $name = $this->getFileName($resources);
 
         $filePath = $this->getCachePath().'/'.$name;
+
+        if (true === $this->debug && file_exists($filePath)) {
+            unlink($filePath);
+        }
 
         if ( ! file_exists($filePath)) {
             $code = $this->process($resources);

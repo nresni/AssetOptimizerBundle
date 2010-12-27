@@ -5,18 +5,18 @@
     xsi:schemaLocation="http://www.symfony-project.org/schema/dic/services http://www.symfony-project.org/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="templating.helper.javascripts.class">Bundle\Adenclassifieds\AssetOptimizerBundle\Helper\JavascriptsHelper</parameter>
-        <parameter key="templating.helper.stylesheets.class">Bundle\Adenclassifieds\AssetOptimizerBundle\Helper\StylesheetsHelper</parameter>
+        <parameter key="templating.helper.javascripts.class">Bundle\Adenclassifieds\AssetOptimizerBundle\Templating\Helper\JavascriptsHelper</parameter>
+        <parameter key="templating.helper.stylesheets.class">Bundle\Adenclassifieds\AssetOptimizerBundle\Templating\Helper\StylesheetsHelper</parameter>
         <parameter key="assetoptimizer.assets_path">%kernel.root_dir%/../web</parameter>
         <parameter key="assetoptimizer.cache_path">%assetoptimizer.assets_path%/cache</parameter>
     </parameters>
 
     <services>
-    	<service id="templating.helper.stylesheets" class="%templating.helper.stylesheets.class%">
+        <service id="templating.helper.stylesheets" class="%templating.helper.stylesheets.class%">
             <tag name="templating.helper" alias="stylesheets" />
             <argument type="service" id="templating.helper.assets" />
         </service>
-    	<service id="templating.helper.javascripts" class="%templating.helper.javascripts.class%">
+        <service id="templating.helper.javascripts" class="%templating.helper.javascripts.class%">
             <tag name="templating.helper" alias="javascripts" />
             <argument type="service" id="templating.helper.assets" />
         </service>
@@ -25,12 +25,14 @@
             <argument type="service" id="request" />
             <argument>%assetoptimizer.assets_path%</argument>
             <argument>%assetoptimizer.cache_path%</argument>
+            <argument>%kernel.debug%</argument>
         </service>
         <service id="asset.optimizer.stylesheet" class="Bundle\Adenclassifieds\AssetOptimizerBundle\Asset\Optimizer\Stylesheet\MinifyOptimizer">
             <argument type="service" id="event_dispatcher" />
             <argument type="service" id="request" />
             <argument>%assetoptimizer.assets_path%</argument>
             <argument>%assetoptimizer.cache_path%</argument>
+            <argument>%kernel.debug%</argument>
         </service>
 
     </services>

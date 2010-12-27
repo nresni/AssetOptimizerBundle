@@ -1,5 +1,6 @@
 <?php
-namespace Bundle\Adenclassifieds\AssetOptimizerBundle\Helper;
+namespace Bundle\Adenclassifieds\AssetOptimizerBundle\Templating\Helper;
+
 /**
  * resourcesHelper is a helper that manages resources.
  *

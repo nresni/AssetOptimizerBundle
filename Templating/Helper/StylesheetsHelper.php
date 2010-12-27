@@ -1,7 +1,6 @@
 <?php
-namespace Bundle\Adenclassifieds\AssetOptimizerBundle\Helper;
+namespace Bundle\Adenclassifieds\AssetOptimizerBundle\Templating\Helper;
 
-use Bundle\Adenclassifieds\AssetOptimizerBundle\Helper\ResourceCollectionHelper;
 /**
  *
  * Enter description here ...
@@ -10,12 +9,11 @@ use Bundle\Adenclassifieds\AssetOptimizerBundle\Helper\ResourceCollectionHelper;
 class StylesheetsHelper extends BaseHelper
 {
     /**
-     * (non-PHPdoc)
-     * @see Bundle\Adenclassifieds\AssetOptimizerBundle\Helper.ResourceCollectionHelper::renderTag()
+     * @{inheritDoc}
      */
     protected function renderTag($path, $atts)
     {
-      return sprintf('<link href="%s" rel="stylesheet" type="text/css"%s />', $path, $atts);
+        return sprintf('<link href="%s?%s" rel="stylesheet" type="text/css"%s />', $path, $this->assetHelper->getVersion(), $atts);
     }
 
     /**
