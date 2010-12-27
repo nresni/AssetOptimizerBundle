@@ -41,8 +41,8 @@ to resolve a non existing path and therefor resolves it to root**
 
 the following code
 
-    <?php $view['stylesheets']->add('/foo/bar.css'); ?>
-    <?php $view['stylesheets']->add('/bar/foo.css'); ?>
+    <?php $view['stylesheets']->add('foo/bar.css'); ?>
+    <?php $view['stylesheets']->add('bar/foo.css'); ?>
     <?php $view['stylesheets']->add('http://foo.com/bar.css'); ?>
     <?php echo $view['stylesheets'] ?>
     
