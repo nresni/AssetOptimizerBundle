@@ -158,7 +158,7 @@ class OptimizerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @cover Bundle\Adenclassifieds\AssetOptimizerBundle\Asset\Optimizer::setAssetPath
+     * @cover Bundle\Adenclassifieds\AssetOptimizerBundle\Asset\Optimizer::setCachePath
      * @expectedException InvalidArgumentException
      */
     public function testSetCachePathThrowAnExceptionWhenPathDoesNotExists()
@@ -170,7 +170,7 @@ class OptimizerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @cover Bundle\Adenclassifieds\AssetOptimizerBundle\Asset\Optimizer::setCachePath
+     * @cover Bundle\Adenclassifieds\AssetOptimizerBundle\Asset\Optimizer::setAssetPath
      * @expectedException InvalidArgumentException
      */
     public function testSetAssetPathThrowAnExceptionWhenPathDoesNotExists()
