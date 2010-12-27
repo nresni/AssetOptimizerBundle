@@ -85,6 +85,16 @@ Here is an exemple of code that checks for attributes "sprite-suffix" and replac
         return $resources;
     }
 
+## Change optimizer classes
+
+You can use your own javascript and stylesheet optimizer by changing the class parameters:
+
+assetoptimizer.config:
+    class:
+        optimizer:
+            javascript: My\Javascript\Optimizer
+            stylesheet: My\Stylesheet\Optimizer
+
 ## Vendor
 
 In order to ease the setup, this bundle contains two vendor libraries : [Minify](http://code.google.com/p/minify/wiki/ComponentClasses) & [JavascriptPacker](http://joliclic.free.fr/php/javascript-packer/en/)

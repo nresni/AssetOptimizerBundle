@@ -7,6 +7,8 @@
     <parameters>
         <parameter key="templating.helper.javascripts.class">Bundle\Adenclassifieds\AssetOptimizerBundle\Templating\Helper\JavascriptsHelper</parameter>
         <parameter key="templating.helper.stylesheets.class">Bundle\Adenclassifieds\AssetOptimizerBundle\Templating\Helper\StylesheetsHelper</parameter>
+        <parameter key="asset.optimizer.javascript.class">Bundle\Adenclassifieds\AssetOptimizerBundle\Asset\Optimizer\Javascript\PackerOptimizer</parameter>
+        <parameter key="asset.optimizer.stylesheet.class">Bundle\Adenclassifieds\AssetOptimizerBundle\Asset\Optimizer\Stylesheet\MinifyOptimizer</parameter>
         <parameter key="assetoptimizer.assets_path">%kernel.root_dir%/../web</parameter>
         <parameter key="assetoptimizer.cache_path">%assetoptimizer.assets_path%/cache</parameter>
     </parameters>
@@ -20,14 +22,14 @@
             <tag name="templating.helper" alias="javascripts" />
             <argument type="service" id="templating.helper.assets" />
         </service>
-        <service id="asset.optimizer.javascript" class="Bundle\Adenclassifieds\AssetOptimizerBundle\Asset\Optimizer\Javascript\PackerOptimizer">
+        <service id="asset.optimizer.javascript" class="%asset.optimizer.javascript.class%">
             <argument type="service" id="event_dispatcher" />
             <argument type="service" id="request" />
             <argument>%assetoptimizer.assets_path%</argument>
             <argument>%assetoptimizer.cache_path%</argument>
             <argument>%kernel.debug%</argument>
         </service>
-        <service id="asset.optimizer.stylesheet" class="Bundle\Adenclassifieds\AssetOptimizerBundle\Asset\Optimizer\Stylesheet\MinifyOptimizer">
+        <service id="asset.optimizer.stylesheet" class="%asset.optimizer.stylesheet.class%">
             <argument type="service" id="event_dispatcher" />
             <argument type="service" id="request" />
             <argument>%assetoptimizer.assets_path%</argument>

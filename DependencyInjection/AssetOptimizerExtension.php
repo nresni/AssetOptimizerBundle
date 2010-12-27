@@ -37,11 +37,14 @@ class AssetOptimizerExtension extends Extension
 
         foreach(array('javascript', 'stylesheet') as $type) {
 
-          $plural = $type.'s';
+            $plural = $type.'s';
 
-          if (array_key_exists($plural, $config)) {
-              $container->getDefinition('templating.helper.'.$plural)->addMethodCall('setOptimizer', array(new Reference('asset.optimizer.'.$type)));
-          }
+            if (array_key_exists($plural, $config)) {
+                $container->getDefinition('templating.helper.'.$plural)->addMethodCall('setOptimizer', array(new Reference('asset.optimizer.'.$type)));
+            }
+            if(isset($config['class']['optimizer'][$type])) {
+                $container->setParameter(sprintf('asset.optimizer.%s.class', $type), $config['class']['optimizer'][$type]);
+            }
         }
     }
 
