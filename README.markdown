@@ -4,7 +4,7 @@ Provides "on the fly" assets compression.
 
 ### Add AssetOptimizerBundle to your src/Bundle dir
 
-    git submodule add git://github.com/dstendardi/AssetOptimizerBundle.git src/Bundle/Adenclassifieds/AssetOptimizerBundle
+    git submodule add git://github.com/Adenclassifieds/AssetOptimizerBundle.git src/Bundle/Adenclassifieds/AssetOptimizerBundle
     
 ### Add AssetOptimizerBundle to your application Kernel
 
@@ -14,7 +14,7 @@ Provides "on the fly" assets compression.
     {
         return array(
             //..
-            new Bundle\Adenclassifieds\AssetOptimizerBundle\Adenclassifieds\AssetOptimizerBundle(),
+            new Bundle\Adenclassifieds\AssetOptimizerBundle\AssetOptimizerBundle(),
             //..
         );    
     }
