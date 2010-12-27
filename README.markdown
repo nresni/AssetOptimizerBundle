@@ -32,7 +32,7 @@ Provides "on the fly" assets compression.
 
 Do not forget to give write permissions
 
-    mkdir -p path/to/cache && chmod 775 path/to/assets/cache
+    mkdir -p path/to/cache && chmod 775 path/to/cache
 
 **If this is not done a error with `cannot write to /compressed-823782837283723823gdasdhjad.css` which is because realpath is trying
 to resolve a non existing path and therefor resolves it to root**
