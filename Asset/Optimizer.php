@@ -101,7 +101,7 @@ abstract class Optimizer
             $helper->remove($resource);
         }
 
-        $directory = str_replace($this->getAssetPath(), '', $this->getCachePath());
+        $directory = str_replace($this->getAssetPath().'/', '', $this->getCachePath());
 
         $helper->add($directory.'/'.$name);
     }

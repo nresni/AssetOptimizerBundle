@@ -4,7 +4,7 @@ namespace Bundle\Adenclassifieds\AssetOptimizerBundle\Tests\Asset;
 require_once 'vfsStream/vfsStream.php';
 
 use Bundle\Adenclassifieds\AssetOptimizerBundle\Asset\Optimizer;
-use Bundle\Adenclassifieds\AssetOptimizerBundle\Helper\BaseHelper;
+use Bundle\Adenclassifieds\AssetOptimizerBundle\Templating\Helper\BaseHelper;
 use vfsStreamWrapper;
 
 /**
@@ -23,7 +23,7 @@ class OptimizerTest extends \PHPUnit_Framework_TestCase
 
          mkdir('vfs://tmp/cache', 0777, true);
 
-         $this->helper = $this->getMockBuilder('Bundle\Adenclassifieds\AssetOptimizerBundle\Helper\BaseHelper')->disableOriginalConstructor()->disableOriginalClone()->setMethods(array('renderTag', 'getName', 'getLocalResources', 'add', 'remove', 'get'))->getMock();
+         $this->helper = $this->getMockBuilder('Bundle\Adenclassifieds\AssetOptimizerBundle\Templating\Helper\BaseHelper')->disableOriginalConstructor()->disableOriginalClone()->setMethods(array('renderTag', 'getName', 'getLocalResources', 'add', 'remove', 'get'))->getMock();
     }
 
     /**

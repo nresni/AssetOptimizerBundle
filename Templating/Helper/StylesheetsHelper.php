@@ -13,7 +13,7 @@ class StylesheetsHelper extends BaseHelper
      */
     protected function renderTag($path, $atts)
     {
-        return sprintf('<link href="%s?%s" rel="stylesheet" type="text/css"%s />', $path, $this->assetHelper->getVersion(), $atts);
+        return sprintf('<link href="%s" rel="stylesheet" type="text/css"%s />', $path, $atts);
     }
 
     /**

@@ -15,7 +15,7 @@ class JavascriptsHelper extends BaseHelper
      */
     protected function renderTag($path, $atts)
     {
-      return sprintf('<script type="text/javascript" src="%s?%s"%s></script>', $path, $this->assetHelper->getVersion(), $atts);
+      return sprintf('<script type="text/javascript" src="%s"%s></script>', $path, $atts);
     }
 
     /**
