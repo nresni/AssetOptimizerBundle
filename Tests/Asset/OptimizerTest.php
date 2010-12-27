@@ -34,17 +34,17 @@ class OptimizerTest extends \PHPUnit_Framework_TestCase
     {
         $this->optimizer = $this->getMockBuilder('Bundle\Adenclassifieds\AssetOptimizerBundle\Asset\Optimizer')->disableOriginalConstructor()->setMethods(array('process', 'compress', 'collect', 'getFileName', 'getCachePath', 'getAssetPath', 'filterResources'))->getMock();
 
-        $resources = array('/foo.css' => array(), '/bar.css' => array());
+        $resources = array('foo.css' => array(), 'bar.css' => array());
 
         $this->optimizer->expects($this->any())->method('collect')->with($this->helper)->will($this->returnValue($resources));
 
         $this->optimizer->expects($this->once())->method('process')->with($resources);
 
-        $this->helper->expects($this->once())->method('add')->with($this->equalTo("/cache/foo-bar.css"));
+        $this->helper->expects($this->once())->method('add')->with($this->equalTo("cache/foo-bar.css"));
 
-        $this->helper->expects($this->at(0))->method('remove')->with($this->equalTo('/foo.css'));
+        $this->helper->expects($this->at(0))->method('remove')->with($this->equalTo('foo.css'));
 
-        $this->helper->expects($this->at(1))->method('remove')->with($this->equalTo('/bar.css'));
+        $this->helper->expects($this->at(1))->method('remove')->with($this->equalTo('bar.css'));
 
         $this->optimizer->expects($this->any())->method('getAssetPath')->will($this->returnValue('vfs://tmp'));
 
@@ -57,7 +57,7 @@ class OptimizerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @test
-     * @cover Bundle\Adenclassifieds\AssetOptimizerBundle\Asset\Optimizer::doOptimize
+     * @cover Bundle\Adenclassifieds\AssetOptimizerBundle\Asset\Optimizer::process
      */
      public function testProcess()
      {
@@ -73,12 +73,12 @@ class OptimizerTest extends \PHPUnit_Framework_TestCase
 
           $this->optimizer->expects($this->any())->method('compress')->will($this->onConsecutiveCalls('a', 'b'));
 
-          $this->assertEquals('ab', $this->optimizer->exposeProcess(array('/foo.css' => array(), '/bar.css' => array())));
+          $this->assertEquals('ab', $this->optimizer->exposeProcess(array('foo.css' => array(), 'bar.css' => array())));
      }
 
     /**
      * @test
-     * @cover Bundle\Adenclassifieds\AssetOptimizerBundle\Asset\Optimizer::doOptimize
+     * @cover Bundle\Adenclassifieds\AssetOptimizerBundle\Asset\Optimizer::process
      * @expectedException InvalidArgumentException
      */
      public function testDoOptimizeThrowAnExceptionWhenAFileIsNotFound()
@@ -93,7 +93,7 @@ class OptimizerTest extends \PHPUnit_Framework_TestCase
 
           $this->optimizer->expects($this->any())->method('compress')->will($this->onConsecutiveCalls('a', 'b'));
 
-          $this->assertEquals('ab', $this->optimizer->exposeProcess(array('/foo.css' => array(), '/bar.css' => array())));
+          $this->assertEquals('ab', $this->optimizer->exposeProcess(array('foo.css' => array(), 'bar.css' => array())));
      }
 
     /**
