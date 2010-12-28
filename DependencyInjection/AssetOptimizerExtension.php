@@ -23,8 +23,7 @@ class AssetOptimizerExtension extends Extension
     public function configLoad($config, ContainerBuilder $container)
     {
         if (!$container->hasDefinition('assetoptimizer')) {
-            $loader = new XmlFileLoader($container, __DIR__.'/../Resources/config');
-            $loader->load('assetoptimizer.xml');
+            $this->loadDefaults($container);
         }
 
         if (isset($config['assets_path'])) {
@@ -46,6 +45,16 @@ class AssetOptimizerExtension extends Extension
                 $container->setParameter(sprintf('asset.optimizer.%s.class', $type), $config[$plural]['class']);
             }
         }
+    }
+
+    /**
+     * Load defaults
+     */
+    protected function loadDefaults(ContainerBuilder $container)
+    {
+        $loader = new XmlFileLoader($container, __DIR__.'/../Resources/config');
+
+        $loader->load('assetoptimizer.xml');
     }
 
     /**
