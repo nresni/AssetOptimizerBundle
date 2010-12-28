@@ -30,9 +30,15 @@ Provides "on the fly" assets compression.
 
 ### Add a cache directory inside the assets folder
 
-Do not forget to give write permissions
+This can be done in two ways.
+
+1. Manually create the cache directory (do not forget to give write permissions).
 
     mkdir -p path/to/cache && chmod 775 path/to/cache
+
+2. Let the bundled clear-cache command do the work for you. When the cache is cleared it will remove the cache folder and recreate it.
+
+    php app/console assets:optimizer:clear-cache
 
 **If this is not done a error with `cannot write to /compressed-823782837283723823gdasdhjad.css` which is because realpath is trying
 to resolve a non existing path and therefor resolves it to root**
