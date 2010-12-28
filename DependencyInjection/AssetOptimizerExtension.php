@@ -40,7 +40,7 @@ class AssetOptimizerExtension extends Extension
             $plural = $type.'s';
 
             if (array_key_exists($plural, $config)) {
-                $container->getDefinition('templating.helper.'.$type)->addMethodCall('setOptimizer', array(new Reference('asset.optimizer.'.$type)));
+                $container->getDefinition('templating.helper.'.$plural)->addMethodCall('setOptimizer', array(new Reference('asset.optimizer.'.$type)));
             }
             if(isset($config[$plural]['class'])) {
                 $container->setParameter(sprintf('asset.optimizer.%s.class', $type), $config[$plural]['class']);
