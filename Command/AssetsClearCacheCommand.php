@@ -31,19 +31,18 @@ class AssetsClearCacheCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $cachePath = $this->container->getParameter('assetoptimizer.cache_path');
         $filesystem = new Filesystem();
 
-        $finder = new Finder();
+        // Remove and Recreaetd the cachepath
+        $filesystem->remove($cachePath);
 
-        $finder = $finder->files()->in($this->container->getParameter('assetoptimizer.cache_path'));
-
-        $count = 0;
-
-        foreach($finder as $file) {
-          $filesystem->remove($file);
-          $count++;
+        if ($filesystem->mkdirs($cachePath)) {
+            $filesystem->chmod($cachePath, 0777);
+        } else {
+            throw new \LogicException(sprintf('Could not create the directory "%s"', $cachePath));
         }
 
-        $output->writeln("removed $count cache file(s)");
+        $output->writeln(sprintf('Removed cache files in <info>%s</info>.', $cachePath));
     }
 }
