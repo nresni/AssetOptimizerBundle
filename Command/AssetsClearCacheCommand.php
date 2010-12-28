@@ -9,7 +9,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Output\Output;
 use Symfony\Bundle\FrameworkBundle\Util\Filesystem;
 use Symfony\Bundle\FrameworkBundle\Command\Command;
-use Symfony\Component\Finder\Finder;
 
 /**
  * AssetsClearCacheCommand.
