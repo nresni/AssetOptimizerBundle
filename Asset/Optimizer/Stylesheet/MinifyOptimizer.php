@@ -25,8 +25,6 @@ class MinifyOptimizer extends StylesheetOptimizer
 
         $realDirectory = dirname(realpath($filePath));
 
-        $symlinks = array();
-
         if (false === in_array($directory, self::$symlinks) && $realDirectory !== $directory) {
             self::$symlinks[$directory] = $realDirectory;
         }
