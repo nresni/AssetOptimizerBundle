@@ -89,11 +89,11 @@ Here is an exemple of code that checks for attributes "sprite-suffix" and replac
 
 You can use your own javascript and stylesheet optimizer by changing the class parameters:
 
-assetoptimizer.config:
-    class:
-        optimizer:
-            javascript: My\Javascript\Optimizer
-            stylesheet: My\Stylesheet\Optimizer
+    assetoptimizer.config:
+        javascripts: 
+            class: My\Javascript\Optimizer
+        stylesheets:
+            class: My\Stylesheet\Optimizer
 
 ## Vendor
 
