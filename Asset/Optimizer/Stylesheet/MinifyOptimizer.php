@@ -8,16 +8,33 @@ use Bundle\Adenclassifieds\AssetOptimizerBundle\Asset\Optimizer\Stylesheet\Minif
 
 class MinifyOptimizer extends StylesheetOptimizer
 {
-  /**
-   * (non-PHPdoc)
-   * @see acAssetOptimizer::compress()
-   */
-  public function compress($filePath)
-  {
-    $source = file_get_contents($filePath);
+    /**
+     * @var array
+     */
+    static $symlinks = array();
 
-    $directory = dirname($filePath);
+    /**
+     * (non-PHPdoc)
+     * @see acAssetOptimizer::compress()
+     */
+    public function compress($filePath)
+    {
+        $source = file_get_contents($filePath);
 
-    return CSS::minify($source, array('currentDir' => $directory, 'docRoot'=> $this->getAssetPath()));
-  }
+        $directory = dirname($filePath);
+
+        $realDirectory = dirname(realpath($filePath));
+
+        $symlinks = array();
+
+        if (false === in_array($directory, self::$symlinks) && $realDirectory !== $directory) {
+            self::$symlinks[$directory] = $realDirectory;
+        }
+
+        return CSS::minify($source, array(
+            'currentDir' => $directory,
+            'docRoot'    => $this->getAssetPath(),
+            'symlinks'   => self::$symlinks,
+        ));
+    }
 }
