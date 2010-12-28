@@ -43,6 +43,6 @@ class AssetsClearCacheCommand extends Command
             throw new \LogicException(sprintf('Could not create the directory "%s"', $cachePath));
         }
 
-        $output->writeln(sprintf('Removed cache files in <info>%s</info>.', $cachePath));
+        $output->writeln(sprintf('Removed cache files in <info>%s</info>.', realpath($cachePath)));
     }
 }
