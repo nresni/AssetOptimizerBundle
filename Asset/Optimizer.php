@@ -2,7 +2,7 @@
 namespace Bundle\Adenclassifieds\AssetOptimizerBundle\Asset;
 
 use Symfony\Component\EventDispatcher\Event;
-use Symfony\Bundle\FrameworkBundle\EventDispatcher;
+use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\Request;
 use Bundle\Adenclassifieds\AssetOptimizerBundle\Templating\Helper\BaseHelper;
 
@@ -143,7 +143,7 @@ abstract class Optimizer
         foreach ($helper->get() as $uri => $attributes) {
             // If a scheme is returned or if the url starts with // lets assume its a external resource
             if (in_array(parse_url($uri, PHP_URL_SCHEME), array('http', 'https')) || '//' == substr($uri, 0, 2)) {
-               continue; 
+               continue;
             }
 
             $locals[$uri] = $attributes;
