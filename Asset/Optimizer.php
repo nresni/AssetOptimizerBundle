@@ -2,18 +2,17 @@
 namespace Bundle\Adenclassifieds\AssetOptimizerBundle\Asset;
 
 use Symfony\Component\EventDispatcher\Event;
-
 use Symfony\Bundle\FrameworkBundle\EventDispatcher;
-
 use Symfony\Component\HttpFoundation\Request;
-
 use Bundle\Adenclassifieds\AssetOptimizerBundle\Templating\Helper\BaseHelper;
 
-use Symfony\Bundle\FrameworkBundle\Templating\Helper\AssetsHelper;
-
 /**
- * Enter description here ...
- * @author dstendardi
+ * Base optimizer class.
+ * Provides the cache system and calls the parent "compress"
+ * method in order to optimize the assets
+ *
+ * @author dstendardi <david.stendardi@adenclassifieds.com>
+ * @author henrikbjorn
  */
 abstract class Optimizer
 {

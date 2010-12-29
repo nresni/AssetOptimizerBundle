@@ -8,10 +8,9 @@ use Bundle\Adenclassifieds\AssetOptimizerBundle\Asset\Optimizer;
 use Bundle\Adenclassifieds\AssetOptimizerBundle\Asset\Optimizer\Javascript\Packer\Packer;
 
 /**
+ * Optimize javascript file using the Javascript Packer library
  *
- * Enter description here ...
- * @author dstendardi
- *
+ * @author dstendardi <david.stendardi@adenclassifieds.com>
  */
 class PackerOptimizer extends JavascriptOptimizer
 {
