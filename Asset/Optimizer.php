@@ -17,19 +17,19 @@ use Symfony\Bundle\FrameworkBundle\Templating\Helper\AssetsHelper;
  */
 abstract class Optimizer
 {
-   /**
-    * @var Request instance
-    */
+    /**
+     * @var Request instance
+     */
     protected $request;
 
-   /**
-    *@var string path where to find assets
-    */
+    /**
+     *@var string path where to find assets
+     */
     protected $assetPath;
 
-   /**
-    * @var string path where to write optimized files
-    */
+    /**
+     * @var string path where to write optimized files
+     */
     protected $cachePath;
 
     /**
@@ -37,9 +37,9 @@ abstract class Optimizer
      */
     protected $fileMask;
 
-   /**
-    * @var EventDispatcher dispatcher
-    */
+    /**
+     * @var EventDispatcher dispatcher
+     */
     protected $eventDispatcher;
 
     /**
@@ -47,11 +47,11 @@ abstract class Optimizer
      */
     protected $debug = false;
 
-   /**
-    * Constructor.
-    *
-    * @param acHelperAsset $assetHelper A acHelperAsset instance
-    */
+    /**
+     * Constructor.
+     *
+     * @param acHelperAsset $assetHelper A acHelperAsset instance
+     */
     public function __construct(EventDispatcher $eventDispatcher, Request $request, $assetPath, $cachePath, $debug = false)
     {
         $this->setEventDispatcher($eventDispatcher);
@@ -65,19 +65,19 @@ abstract class Optimizer
         $this->debug = (Boolean) $debug;
     }
 
-   /**
-    * Gets and compresses code from the given file path
-    *
-    * @param string $filePath
-    */
+    /**
+     * Gets and compresses code from the given file path
+     *
+     * @param string $filePath
+     */
     protected abstract function compress($filePath);
 
-   /**
-    * Collect and compress asset code inside a unique file
-    * using basePath & fileName configuration
-    *
-    * @param BaseHelper resource collection
-    */
+    /**
+     * Collect and compress asset code inside a unique file
+     * using basePath & fileName configuration
+     *
+     * @param BaseHelper resource collection
+     */
     public function optimize(BaseHelper $helper)
     {
         $resources = $this->collect($helper);
@@ -93,7 +93,7 @@ abstract class Optimizer
         if ( ! file_exists($filePath)) {
             $code = $this->process($resources);
             if (false === file_put_contents($filePath, $code)) {
-                  throw new \RuntimeException("Unable to write the file <$filePath>");
+                throw new \RuntimeException("Unable to write the file <$filePath>");
             }
         }
 
@@ -120,13 +120,13 @@ abstract class Optimizer
 
         foreach ($resources as $resource => $attributes) {
 
-          $path = $this->getAssetPath().'/'.$resource;
+            $path = $this->getAssetPath().'/'.$resource;
 
-          if (  ! file_exists($path)) {
-              throw new \InvalidArgumentException('The following file does not exists : '.$path);
-          }
+            if (  ! file_exists($path)) {
+                throw new \InvalidArgumentException('The following file does not exists : '.$path);
+            }
 
-          $buffer .= $this->compress($path);
+            $buffer .= $this->compress($path);
         }
 
         return $buffer;
@@ -141,20 +141,23 @@ abstract class Optimizer
     public function collect(BaseHelper $helper)
     {
         $locals = array();
-        foreach($helper->get() as $uri => $attributes) {
-          if(0 !== strpos($uri,'http' )) {
+        foreach ($helper->get() as $uri => $attributes) {
+            // If a scheme is returned or if the url starts with // lets assume its a external resource
+            if (in_array(parse_url($uri, PHP_URL_SCHEME), array('http', 'https')) || '//' == substr($uri, 0, 2)) {
+               continue; 
+            }
+
             $locals[$uri] = $attributes;
-          }
         }
         return $locals;
     }
 
-   /**
-    * Filter the resources using event dispatcher
-    *
-    * @param array resources
-    * @return array filtered resources
-    */
+    /**
+     * Filter the resources using event dispatcher
+     *
+     * @param array resources
+     * @return array filtered resources
+     */
     public function filterResources(array $resources)
     {
         $event = new Event($this, 'assetoptimizer.filter_resources');
@@ -164,12 +167,12 @@ abstract class Optimizer
         return $event->getReturnValue();
     }
 
-   /**
-    * Returns the expected file name for the bundled file.
-    * The signature is deduced from the user agent & the file names
-    *
-    * @return string file name
-    */
+    /**
+     * Returns the expected file name for the bundled file.
+     * The signature is deduced from the user agent & the file names
+     *
+     * @return string file name
+     */
     protected function getFileName(array $resources)
     {
         $signature = array_keys($resources);
@@ -193,9 +196,9 @@ abstract class Optimizer
         return $this->request->headers->get('User-Agent');
     }
 
-   /**
-    * @param EventDispatcher dispatcher
-    */
+    /**
+     * @param EventDispatcher dispatcher
+     */
     public function setEventDispatcher(EventDispatcher $eventDispatcher)
     {
         $this->eventDispatcher = $eventDispatcher;
@@ -209,9 +212,9 @@ abstract class Optimizer
         return $this->eventDispatcher;
     }
 
-   /**
-    * @var string full path to asset directory
-    */
+    /**
+     * @var string full path to asset directory
+     */
     public function setAssetPath($path)
     {
         $this->assetPath = realpath($path);
@@ -229,9 +232,9 @@ abstract class Optimizer
         return $this->assetPath;
     }
 
-   /**
-    * @var string full path to cache directory
-    */
+    /**
+     * @var string full path to cache directory
+     */
     public function setCachePath($path)
     {
         $this->cachePath = realpath($path);
@@ -249,9 +252,9 @@ abstract class Optimizer
         return $this->cachePath;
     }
 
-   /**
-    * @param Request instance
-    */
+    /**
+     * @param Request instance
+     */
     public function setRequest(Request $request)
     {
         $this->request = $request;
@@ -265,9 +268,9 @@ abstract class Optimizer
         return $this->request;
     }
 
-   /**
-    * @param string file mask with replacements
-    */
+    /**
+     * @param string file mask with replacements
+     */
     public function setFileMask($fileMask)
     {
         $this->fileMask = $fileMask;
