@@ -1,7 +1,7 @@
 <?php
 namespace Bundle\Adenclassifieds\AssetOptimizerBundle\Tests\Asset;
 
-use Bundle\Adenclassifieds\AssetOptimizerBundle\Helper\BaseHelper;
+use Bundle\Adenclassifieds\AssetOptimizerBundle\Templating\Helper\BaseHelper;
 
 use Bundle\Adenclassifieds\AssetOptimizerBundle\Asset\Optimizer;
 
@@ -22,9 +22,9 @@ class OptimizerExposer extends Optimizer
     }
 
     /**
-     * Exposes the protected get file name method
+     * Exposes the protected getFileName method
      *
-     * @param BaseHelper helper
+     * @param array resources
      */
     public function exposeGetFileName(array $resources)
     {
@@ -32,12 +32,22 @@ class OptimizerExposer extends Optimizer
     }
 
     /**
-     * Exposes the protected get file name method
+     * Exposes the protected process name method
      *
-     * @param BaseHelper helper
+     * @param array resources
      */
     public function exposeProcess(array $resources)
     {
         return $this->process($resources);
+    }
+
+    /**
+     * Exposes the protected collect name method
+     *
+     * @param BaseHelper helper
+     */
+    public function exposeCollect(BaseHelper $helper)
+    {
+        return $this->collect($helper);
     }
 }

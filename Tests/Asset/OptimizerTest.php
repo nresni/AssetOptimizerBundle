@@ -125,7 +125,7 @@ class OptimizerTest extends \PHPUnit_Framework_TestCase
 
         $this->optimizer = $this->getMockBuilder('Bundle\Adenclassifieds\AssetOptimizerBundle\Asset\Optimizer')->disableOriginalConstructor()->setMethods(array('compress'))->getMock();
 
-        $resources = array('vfs://tmp/foo.css' => array(), 'http://tmp/bar.css' => array());
+        $resources = array('vfs://tmp/foo.css' => array(), 'http://tmp/bar.css' => array(),  '//foo/bar' => array());
 
         $this->helper->expects($this->once())->method('get')->will($this->returnValue($resources));
 
