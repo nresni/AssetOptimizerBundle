@@ -3,7 +3,6 @@ namespace Bundle\Adenclassifieds\AssetOptimizerBundle\Asset;
 
 use Symfony\Component\EventDispatcher\Event;
 use Symfony\Bundle\FrameworkBundle\EventDispatcher;
-use Symfony\Component\HttpFoundation\Request;
 use Bundle\Adenclassifieds\AssetOptimizerBundle\Templating\Helper\BaseHelper;
 
 /**
@@ -16,11 +15,6 @@ use Bundle\Adenclassifieds\AssetOptimizerBundle\Templating\Helper\BaseHelper;
  */
 abstract class Optimizer
 {
-    /**
-     * @var Request instance
-     */
-    protected $request;
-
     /**
      *@var string path where to find assets
      */
@@ -51,11 +45,9 @@ abstract class Optimizer
      *
      * @param acHelperAsset $assetHelper A acHelperAsset instance
      */
-    public function __construct(EventDispatcher $eventDispatcher, Request $request, $assetPath, $cachePath, $debug = false)
+    public function __construct(EventDispatcher $eventDispatcher, $assetPath, $cachePath, $debug = false)
     {
         $this->setEventDispatcher($eventDispatcher);
-
-        $this->setRequest($request);
 
         $this->setAssetPath($assetPath);
 
@@ -193,21 +185,11 @@ abstract class Optimizer
 
         sort($signature);
 
-        $signature[] = $this->getRequestUserAgent();
-
         $signature = implode('-', $signature);
 
         $name = strtr($this->getFileMask(), array('<signature>' => md5($signature)));
 
         return $name;
-    }
-
-    /**
-     * @return string user agent
-     */
-    public function getRequestUserAgent()
-    {
-        return $this->request->headers->get('User-Agent');
     }
 
     /**
@@ -264,22 +246,6 @@ abstract class Optimizer
     public function getCachePath()
     {
         return $this->cachePath;
-    }
-
-    /**
-     * @param Request instance
-     */
-    public function setRequest(Request $request)
-    {
-        $this->request = $request;
-    }
-
-    /**
-     * @return Request  instance
-     */
-    public function getRequest()
-    {
-        return $this->request;
     }
 
     /**

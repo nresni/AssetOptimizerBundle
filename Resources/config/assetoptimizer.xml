@@ -24,14 +24,12 @@
         </service>
         <service id="asset.optimizer.javascript" class="%asset.optimizer.javascript.class%">
             <argument type="service" id="event_dispatcher" />
-            <argument type="service" id="request" />
             <argument>%assetoptimizer.assets_path%</argument>
             <argument>%assetoptimizer.cache_path%</argument>
             <argument>%kernel.debug%</argument>
         </service>
         <service id="asset.optimizer.stylesheet" class="%asset.optimizer.stylesheet.class%">
             <argument type="service" id="event_dispatcher" />
-            <argument type="service" id="request" />
             <argument>%assetoptimizer.assets_path%</argument>
             <argument>%assetoptimizer.cache_path%</argument>
             <argument>%kernel.debug%</argument>
