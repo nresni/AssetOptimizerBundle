@@ -183,7 +183,7 @@ abstract class Optimizer
     {
         asort($resources);
 
-        $signature = implode('-', array_map('md5_file', array_keys($resources)));
+        $signature = implode('-', array_keys($resources));
 
         $name = strtr($this->getFileMask(), array('<signature>' => md5($signature)));
 
