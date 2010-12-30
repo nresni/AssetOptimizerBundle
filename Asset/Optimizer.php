@@ -81,6 +81,11 @@ abstract class Optimizer
     {
         $resources = $this->collect($helper);
 
+        // If no resources are found or they all are external or standalone done proceed
+        if (false === (Boolean) count($resources)) {
+            return;
+        }
+
         $name = $this->getFileName($resources);
 
         $filePath = $this->getCachePath().'/'.$name;
@@ -141,6 +146,16 @@ abstract class Optimizer
     {
         $locals = array();
         foreach ($helper->get() as $uri => $attributes) {
+            if (isset($attributes['standalone'])) {
+                $standalone = (Boolean) $attributes['standalone'];
+
+                unset($attributes['standalone']);
+
+                if (true === $standalone) {
+                    continue;
+                }
+            }
+
             // If a scheme is returned or if the url starts with // lets assume its a external resource
             if (in_array(parse_url($uri, PHP_URL_SCHEME), array('http', 'https')) || '//' == substr($uri, 0, 2)) {
                continue; 
