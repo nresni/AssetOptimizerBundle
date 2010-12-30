@@ -64,9 +64,13 @@ will not be combing and/or minified.
 
     {% javascript 'path/to/file.js' with { 'standalone' : true } %}
 
+    <?php $view['javascripts']->add('path/to/file.js', array('standalone' => true)); ?>
+
 and the same for stylesheets
 
     {% stylesheet 'path/to/file.css' with { 'standalone' : true } %}
+
+    <?php $view['stylesheets']->add('path/to/file.css', array('standalone' => true)); ?>
 
 ## Command lines
 
