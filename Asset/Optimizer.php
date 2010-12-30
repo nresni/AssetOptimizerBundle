@@ -181,11 +181,9 @@ abstract class Optimizer
      */
     protected function getFileName(array $resources)
     {
-        $signature = array_keys($resources);
+        asort($resources);
 
-        sort($signature);
-
-        $signature = implode('-', $signature);
+        $signature = implode('-', array_map('md5_file', array_keys($resources)));
 
         $name = strtr($this->getFileMask(), array('<signature>' => md5($signature)));
 
