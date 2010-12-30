@@ -74,7 +74,7 @@ abstract class Optimizer
         $resources = $this->collect($helper);
 
         // If no resources are found or they all are external or standalone done proceed
-        if (false === (Boolean) count($resources)) {
+        if (empty($resources)) {
             return;
         }
 

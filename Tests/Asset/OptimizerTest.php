@@ -70,6 +70,25 @@ class OptimizerTest extends \PHPUnit_Framework_TestCase
         $this->optimizer->optimize($this->helper);
     }
 
+
+    /**
+     * @test
+     * @cover Bundle\Adenclassifieds\AssetOptimizerBundle\Asset\Optimizer::optimize
+     */
+    public function testOptimizeSkipFileGenerationWhereNoResourcesWhereCollected()
+    {
+        $this->setUpFileSystem();
+
+        $this->optimizer = $this->getMockBuilder('Bundle\Adenclassifieds\AssetOptimizerBundle\Asset\Optimizer')->disableOriginalConstructor()->setMethods(array('collect', 'getFileName', 'compress'))->getMock();
+
+        $this->optimizer->expects($this->any())->method('collect')->with($this->helper)->will($this->returnValue(array()));
+
+        $this->optimizer->expects($this->never())->method('getFileName');
+
+        $this->optimizer->optimize($this->helper);
+    }
+
+
     /**
      * @test
      * @cover Bundle\Adenclassifieds\AssetOptimizerBundle\Asset\Optimizer::process
