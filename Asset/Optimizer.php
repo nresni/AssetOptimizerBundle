@@ -2,7 +2,6 @@
 namespace Bundle\Adenclassifieds\AssetOptimizerBundle\Asset;
 
 use Symfony\Component\EventDispatcher\Event;
-use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\Request;
 use Bundle\Adenclassifieds\AssetOptimizerBundle\Templating\Helper\BaseHelper;
 
@@ -16,11 +15,6 @@ use Bundle\Adenclassifieds\AssetOptimizerBundle\Templating\Helper\BaseHelper;
  */
 abstract class Optimizer
 {
-    /**
-     * @var Request instance
-     */
-    protected $request;
-
     /**
      *@var string path where to find assets
      */
@@ -51,11 +45,9 @@ abstract class Optimizer
      *
      * @param acHelperAsset $assetHelper A acHelperAsset instance
      */
-    public function __construct(EventDispatcher $eventDispatcher, Request $request, $assetPath, $cachePath, $debug = false)
+    public function __construct(EventDispatcher $eventDispatcher, $assetPath, $cachePath, $debug = false)
     {
         $this->setEventDispatcher($eventDispatcher);
-
-        $this->setRequest($request);
 
         $this->setAssetPath($assetPath);
 
@@ -80,6 +72,11 @@ abstract class Optimizer
     public function optimize(BaseHelper $helper)
     {
         $resources = $this->collect($helper);
+
+        // If no resources are found or they all are external or standalone done proceed
+        if (false === (Boolean) count($resources)) {
+            return;
+        }
 
         $name = $this->getFileName($resources);
 
@@ -141,6 +138,16 @@ abstract class Optimizer
     {
         $locals = array();
         foreach ($helper->get() as $uri => $attributes) {
+            if (isset($attributes['standalone'])) {
+                $standalone = (boolean) $attributes['standalone'];
+
+                unset($attributes['standalone']);
+
+                if (true === $standalone) {
+                    continue;
+                }
+            }
+
             // If a scheme is returned or if the url starts with // lets assume its a external resource
             if (in_array(parse_url($uri, PHP_URL_SCHEME), array('http', 'https')) || '//' == substr($uri, 0, 2)) {
                continue;
@@ -174,25 +181,13 @@ abstract class Optimizer
      */
     protected function getFileName(array $resources)
     {
-        $signature = array_keys($resources);
+        ksort($resources);
 
-        sort($signature);
-
-        $signature[] = $this->getRequestUserAgent();
-
-        $signature = implode('-', $signature);
+        $signature = implode('-', array_keys($resources));
 
         $name = strtr($this->getFileMask(), array('<signature>' => md5($signature)));
 
         return $name;
-    }
-
-    /**
-     * @return string user agent
-     */
-    public function getRequestUserAgent()
-    {
-        return $this->request->headers->get('User-Agent');
     }
 
     /**
@@ -249,22 +244,6 @@ abstract class Optimizer
     public function getCachePath()
     {
         return $this->cachePath;
-    }
-
-    /**
-     * @param Request instance
-     */
-    public function setRequest(Request $request)
-    {
-        $this->request = $request;
-    }
-
-    /**
-     * @return Request  instance
-     */
-    public function getRequest()
-    {
-        return $this->request;
     }
 
     /**

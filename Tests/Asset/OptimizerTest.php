@@ -132,6 +132,24 @@ class OptimizerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(array('vfs://tmp/foo.css' => array()), $this->optimizer->collect($this->helper));
     }
 
+        /**
+     * @test
+     * @cover Bundle\Adenclassifieds\AssetOptimizerBundle\Asset\Optimizer::collect
+     */
+    public function testCollectExcludeResourceWithStandaloneAttribute()
+    {
+        $this->setUpFileSystem();
+
+        $this->optimizer = $this->getMockBuilder('Bundle\Adenclassifieds\AssetOptimizerBundle\Asset\Optimizer')->disableOriginalConstructor()->setMethods(array('compress'))->getMock();
+
+        $resources = array('vfs://tmp/foo.css' => array('standalone' => true), 'http://tmp/bar.css' => array(),  '//foo/bar' => array());
+
+        $this->helper->expects($this->once())->method('get')->will($this->returnValue($resources));
+
+        $this->assertEquals(array(), $this->optimizer->collect($this->helper));
+    }
+
+
     /**
      * @test
      * @cover Bundle\AssetOptmizerBundle\Asset\Optimizer::getFileName
@@ -140,13 +158,11 @@ class OptimizerTest extends \PHPUnit_Framework_TestCase
     {
         $this->setUpFileSystem();
 
-        $this->optimizer = $this->getMockBuilder('Bundle\Adenclassifieds\AssetOptimizerBundle\Tests\Asset\OptimizerExposer')->setMethods(array('getRequestUserAgent', 'getFileMask'))->disableOriginalConstructor()->getMock();
-
-        $this->optimizer->expects($this->any())->method('getRequestUserAgent')->will($this->returnValue('foo'));
+        $this->optimizer = $this->getMockBuilder('Bundle\Adenclassifieds\AssetOptimizerBundle\Tests\Asset\OptimizerExposer')->setMethods(array('getFileMask'))->disableOriginalConstructor()->getMock();
 
         $this->optimizer->expects($this->any())->method('getFileMask')->will($this->returnValue('mask-<signature>.css'));
 
-        $this->assertEquals('mask-cdda47aa3f963c11d4850a9e7b21353b.css', $this->optimizer->exposeGetFileName(array('vfs://tmp/foo.css' => array(), 'vfs://tmp/bar.css' => array())), 'the file name contains the expected md5 hash');
+        $this->assertEquals('mask-ade6b24ae79a0d8eff9e3f5393c85890.css', $this->optimizer->exposeGetFileName(array('vfs://tmp/foo.css' => array(), 'vfs://tmp/bar.css' => array())), 'the file name contains the expected md5 hash');
     }
 
     /**
@@ -157,30 +173,11 @@ class OptimizerTest extends \PHPUnit_Framework_TestCase
     {
         $this->setUpFileSystem();
 
-        $this->optimizer = $this->getMockBuilder('Bundle\Adenclassifieds\AssetOptimizerBundle\Tests\Asset\OptimizerExposer')->setMethods(array('getRequestUserAgent', 'getFileMask'))->disableOriginalConstructor()->getMock();
+        $this->optimizer = $this->getMockBuilder('Bundle\Adenclassifieds\AssetOptimizerBundle\Tests\Asset\OptimizerExposer')->setMethods(array('getFileMask'))->disableOriginalConstructor()->getMock();
 
         $this->optimizer->expects($this->any())->method('getFileMask')->will($this->returnValue('mask-<signature>.css'));
 
-        $this->optimizer->expects($this->any())->method('getRequestUserAgent')->will($this->returnValue('foo'));
-
-        $this->assertEquals('mask-cdda47aa3f963c11d4850a9e7b21353b.css', $this->optimizer->exposeGetFileName(array('vfs://tmp/bar.css' => array(), 'vfs://tmp/foo.css' => array())), 'the md5 hash does not depends on resources order');
-    }
-
-    /**
-     * @test
-     * @cover Bundle\Adenclassifieds\AssetOptimizerBundle\Asset\Optimizer::getFileName
-     */
-    public function testGetFileNameDependsOnRequestUserAgent()
-    {
-        $this->setUpFileSystem();
-
-        $this->optimizer = $this->getMockBuilder('Bundle\Adenclassifieds\AssetOptimizerBundle\Tests\Asset\OptimizerExposer')->setMethods(array('getRequestUserAgent', 'getFileMask'))->disableOriginalConstructor()->getMock();
-
-        $this->optimizer->expects($this->any())->method('getFileMask')->will($this->returnValue('mask-<signature>.css'));
-
-        $this->optimizer->expects($this->any())->method('getRequestUserAgent')->will($this->returnValue('bar'));
-
-        $this->assertEquals('mask-a499e21d88613b36c559c633a7376017.css', $this->optimizer->exposeGetFileName(array('vfs://tmp/bar.css' => array(), 'vfs://tmp/foo.css' => array())), 'the md5 hash does depends on user agent');
+        $this->assertEquals('mask-ade6b24ae79a0d8eff9e3f5393c85890.css', $this->optimizer->exposeGetFileName(array('vfs://tmp/bar.css' => array(), 'vfs://tmp/foo.css' => array())), 'the md5 hash does not depends on resources order');
     }
 
     /**
@@ -190,7 +187,7 @@ class OptimizerTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetCachePathThrowAnExceptionWhenPathDoesNotExists()
     {
-        $this->optimizer = $this->getMockBuilder('Bundle\Adenclassifieds\AssetOptimizerBundle\Tests\Asset\OptimizerExposer')->setMethods(array('getRequestUserAgent', 'getFileMask'))->disableOriginalConstructor()->getMock();
+        $this->optimizer = $this->getMockBuilder('Bundle\Adenclassifieds\AssetOptimizerBundle\Tests\Asset\OptimizerExposer')->setMethods(array('getFileMask'))->disableOriginalConstructor()->getMock();
 
         $this->optimizer->setAssetPath('foo');
     }
@@ -202,7 +199,7 @@ class OptimizerTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetAssetPathThrowAnExceptionWhenPathDoesNotExists()
     {
-        $this->optimizer = $this->getMockBuilder('Bundle\Adenclassifieds\AssetOptimizerBundle\Tests\Asset\OptimizerExposer')->setMethods(array('getRequestUserAgent', 'getFileMask'))->disableOriginalConstructor()->getMock();
+        $this->optimizer = $this->getMockBuilder('Bundle\Adenclassifieds\AssetOptimizerBundle\Tests\Asset\OptimizerExposer')->setMethods(array('getFileMask'))->disableOriginalConstructor()->getMock();
 
         $this->optimizer->setCachePath('foo');
     }
